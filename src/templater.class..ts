@@ -7,7 +7,7 @@ const customTags = ['<<<', '>>>'];
 
 (mustache.tags as string[]) = customTags;
 
-export class Mustache {
+export class Templater {
   public interfaceTemplate: string;
 
   constructor() {

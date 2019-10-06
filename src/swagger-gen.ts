@@ -5,7 +5,7 @@ import { FsOperator } from './fs-operator.class';
 import { consoleHelp } from './help';
 import { HttpTransport } from './http-transport.class';
 import { InterfaceGenerator } from './interface-generator.class';
-import { Mustache } from './mustache.class.';
+import { Templater } from './templater.class.';
 import { Swagger } from './swagger';
 
 config();
@@ -17,7 +17,7 @@ export class SwaggerGen {
   private dir: string;
   private url: string;
 
-  private mustache: Mustache;
+  private mustache: Templater;
   private interfaceGenerator: InterfaceGenerator;
   private httpTransport: HttpTransport;
   private fsOperator: FsOperator;
@@ -25,7 +25,7 @@ export class SwaggerGen {
   constructor() {
     this.httpTransport = new HttpTransport();
     this.fsOperator = new FsOperator();
-    this.mustache = new Mustache();
+    this.mustache = new Templater();
     this.interfaceGenerator = new InterfaceGenerator(this.mustache);
   }
 

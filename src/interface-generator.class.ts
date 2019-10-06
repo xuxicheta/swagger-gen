@@ -1,5 +1,5 @@
 import { writeFileSync } from 'fs';
-import { Mustache } from 'mustache.class.';
+import { Templater } from 'templater.class.';
 import { resolve } from 'path';
 import { Swagger, SwaggerDefinition, SwaggerPropertyDefinition, SwaggerType } from 'swagger';
 
@@ -16,7 +16,7 @@ interface InterfaceImport {
 export class InterfaceGenerator {
 
   constructor(
-    private mustache: Mustache,
+    private mustache: Templater,
   ) {}
 
   public makeInterfaces(swaggerObject: Swagger, dir: string): void {
