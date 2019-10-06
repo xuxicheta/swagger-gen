@@ -15,6 +15,10 @@
     "request": "^2.88.0",
     "yargs": "^14.0.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xuxicheta/swagger-interface-genetator"
+  },
   "private": false,
   "keywords": ["swagger", "open api", "typescript"],
   "devDependencies": {
