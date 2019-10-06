@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "tsc && node out/index.js --env LOCAL_SWAGGER_URL",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "Anton Shvets",
   "license": "ISC",
@@ -20,13 +20,20 @@
     "url": "https://github.com/xuxicheta/swagger-interface-genetator"
   },
   "private": false,
-  "keywords": ["swagger", "open api", "typescript"],
+  "keywords": [
+    "swagger",
+    "open api",
+    "typescript"
+  ],
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
+    "@types/jest": "^24.0.18",
     "@types/mustache": "^0.8.32",
     "@types/node": "^12.7.11",
     "@types/request": "^2.48.3",
     "@types/yargs": "^13.0.3",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
     "tslint": "^5.20.0",
     "typescript": "^3.6.3"

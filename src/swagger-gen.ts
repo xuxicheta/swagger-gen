@@ -5,8 +5,8 @@ import { FsOperator } from './fs-operator.class';
 import { consoleHelp } from './help';
 import { HttpTransport } from './http-transport.class';
 import { InterfaceGenerator } from './interface-generator.class';
-import { Templater } from './templater.class.';
 import { Swagger } from './swagger';
+import { Templater } from './templater.class';
 
 config();
 

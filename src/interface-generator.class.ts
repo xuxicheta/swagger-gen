@@ -1,15 +1,15 @@
 import { writeFileSync } from 'fs';
-import { Templater } from 'templater.class.';
 import { resolve } from 'path';
 import { Swagger, SwaggerDefinition, SwaggerPropertyDefinition, SwaggerType } from 'swagger';
+import { Templater } from 'templater.class';
 
-interface InterfaceProperty {
+export interface InterfaceProperty {
   name: string;
   description: string;
   type: string;
 }
 
-interface InterfaceImport {
+export interface InterfaceImport {
   importedName: string;
 }
 
