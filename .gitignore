@@ -1,0 +1,4 @@
+.env
+models
+dist
+node_modules
