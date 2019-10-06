@@ -1,12 +1,15 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": "test",
     "target": "es2016",
     "module": "commonjs",
-    "outDir": "dist/swagger-gen",
+    "outDir": "dist/test",
     "sourceMap": true,
     "declaration": true
   },
-
-  "exclude": ["models", "dist", "test"]
+  "exclude": [
+    "models",
+    "dist",
+    "test/*/*.sample.ts"
+  ]
 }
