@@ -1,5 +1,5 @@
 export function consoleHelp(): void {
-  console.log(` available options:
+  console.info(` available options:
 --dev
 --local
 

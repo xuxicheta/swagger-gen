@@ -56,7 +56,7 @@ export interface SwaggerHttpEndpoint {
       description: string;
       schema: Schema;
     }
-  }
+  };
   deprecated: boolean;
 }
 

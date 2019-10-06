@@ -1,5 +1,5 @@
 {
-  "name": "swagger-gen",
+  "name": "swagger-interfaces-generator",
   "version": "1.0.0",
   "description": "swagger interfaces generator",
   "main": "index.js",
@@ -15,6 +15,8 @@
     "request": "^2.88.0",
     "yargs": "^14.0.0"
   },
+  "private": false,
+  "keywords": ["swagger", "open api", "typescript"],
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
     "@types/mustache": "^0.8.32",
@@ -22,6 +24,7 @@
     "@types/request": "^2.48.3",
     "@types/yargs": "^13.0.3",
     "ts-node": "^8.4.1",
+    "tslint": "^5.20.0",
     "typescript": "^3.6.3"
   }
 }
