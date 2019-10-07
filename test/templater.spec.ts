@@ -4,8 +4,6 @@ import { templaterDummy1 } from './templater/templater.dummy.1';
 import { templaterDummy2 } from './templater/templater.dummy.2';
 import { templaterDummy3 } from './templater/templater.dummy.3';
 
-// console.log(__dirname);
-
 const sample1: string = readFileSync('./test/templater/templater.sample.1.ts').toString();
 const sample2: string = readFileSync('./test/templater/templater.sample.2.ts').toString();
 const sample3: string = readFileSync('./test/templater/templater.sample.3.ts').toString();
@@ -15,7 +13,6 @@ describe('class should be created', () => {
     const templater = new Templater();
     expect(templater).toBeInstanceOf(Templater);
   });
-
 });
 
 describe('templating interface', () => {
