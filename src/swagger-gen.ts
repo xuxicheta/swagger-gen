@@ -45,7 +45,7 @@ export class SwaggerGen {
       throw new Error('url not found in environment');
     }
 
-    this.swaggerObject = await this.httpTransport.requestSwaggerObject(this.url);
+    this.swaggerObject = await this.httpTransport.requestObject(this.url);
     const existedDir = this.fsOperator.mkDirModels(this.dir);
     this.interfaceGenerator.makeInterfaces(this.swaggerObject, existedDir);
   }

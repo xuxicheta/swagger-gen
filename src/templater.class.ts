@@ -4,10 +4,6 @@ import { InterfaceImport, InterfaceProperty } from './interface-generator.class'
 
 const MODEL_TEMPLATE = 'mustache/model.mustache';
 
-const customTags = ['<<<', '>>>'];
-
-(mustache.tags as string[]) = customTags;
-
 export interface TemplateInterfaceData {
   description?: string;
   interfaceName: string;

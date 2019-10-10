@@ -5,7 +5,8 @@
     "module": "commonjs",
     "outDir": "dist/swagger-gen",
     "sourceMap": true,
-    "declaration": true
+    "declaration": true,
+    "esModuleInterop": true
   },
 
   "exclude": ["models", "dist", "test"]

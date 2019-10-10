@@ -4,7 +4,7 @@
   "description": "swagger interfaces generator",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && node out/index.js --env LOCAL_SWAGGER_URL",
+    "start": "tsc && node dist/swagger-gen/index.js --env LOCAL_SWAGGER_URL",
     "test": "jest"
   },
   "author": "Anton Shvets",

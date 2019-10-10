@@ -5,7 +5,8 @@
     "module": "commonjs",
     "outDir": "dist/test",
     "sourceMap": true,
-    "declaration": true
+    "declaration": true,
+    "esModuleInterop": true
   },
   "exclude": [
     "models",

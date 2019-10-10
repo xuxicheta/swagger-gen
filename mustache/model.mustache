@@ -1,15 +1,15 @@
-<<<#imports>>>
-import { <<< importedName >>> } from './<<< importedName >>>';
-<<</imports>>>
-<<<#imports.0>>>
+{{#imports}}
+import { {{ importedName }} } from './{{ importedName }}';
+{{/imports}}
+{{#imports.0}}
 
-<<</imports.0>>>
-<<<#description>>>
-/** <<< description >>> */
-<<</description>>>
-export interface <<< interfaceName>>> {
-  <<<#properties>>>
-  /** <<< description >>> */
-  <<<name>>>: <<<type>>>;
-  <<</properties>>>
+{{/imports.0}}
+{{#description}}
+/** {{ description }} */
+{{/description}}
+export interface {{ interfaceName}} {
+  {{#properties}}
+  /** {{ description }} */
+  {{name}}: {{type}};
+  {{/properties}}
 }
