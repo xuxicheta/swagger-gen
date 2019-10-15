@@ -1,11 +1,15 @@
-import { get, RequestCallback } from 'request';
+import { get, RequestCallback, Response } from 'request';
 import { HttpTransport } from '../src/http-transport.class';
 
-jest.mock('request');
-type Resolved = { body: string };
-type Get = (uri: string, callback?: RequestCallback) => Resolved;
+interface ResolvedResponse {
+  body: string;
+}
+type MockedGet = (uri: string, callback?: RequestCallback) => ResolvedResponse;
 
-const mockedGet: jest.MockInstance<Get, any> = get as any;
+jest.mock('request');
+
+// tslint:disable-next-line: no-any
+const mockedGet: jest.MockedFunction<MockedGet> = get as any;
 
 describe('class should be created', () => {
   it('created', () => {
@@ -15,13 +19,29 @@ describe('class should be created', () => {
 });
 
 describe('class should work', () => {
-  it('request', async () => {
-    const resp = { body: 'body' };
-    // @ts-ignore
-    mockedGet.mockResolvedValue(resp as any);
-    const swaggerUrl = 'http://xxx';
+
+  it('request success', () => {
+    const bodyObject = { data: 'data body' };
+    const body = JSON.stringify(bodyObject);
+    mockedGet.mockImplementationOnce((uri: string, callback) => {
+      callback(null, { body } as Response, body);
+      return null;
+    });
     const httpTransport = new HttpTransport();
-    const result = await httpTransport.requestObject<Resolved>(swaggerUrl);
-    expect(result).toEqual(resp);
+    const result = httpTransport.requestObject<ResolvedResponse>('http://xxx');
+    return expect(result).resolves.toEqual(bodyObject);
+  });
+
+  it('request failure', async () => {
+    const bodyObject = { data: 'data body' };
+    const body = JSON.stringify(bodyObject);
+    const error = new Error('404');
+    mockedGet.mockImplementationOnce((uri: string, callback) => {
+      callback(error, { body } as Response, body);
+      return null;
+    });
+    const httpTransport = new HttpTransport();
+    const result = httpTransport.requestObject<ResolvedResponse>('http://xxx');
+    return expect(result).rejects.toEqual(error);
   });
 });
