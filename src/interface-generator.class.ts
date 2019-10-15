@@ -16,7 +16,7 @@ export interface InterfaceImport {
 export class InterfaceGenerator {
 
   constructor(
-    private mustache: Templater,
+    private templater: Templater,
   ) {}
 
   public makeInterfaces(swaggerObject: Swagger, dir: string): void {
@@ -35,7 +35,7 @@ export class InterfaceGenerator {
     const properties = this.makeProperties(definition);
     const imports = this.makeImports(name, definition);
 
-    return this.mustache.renderInterface({
+    return this.templater.renderInterface({
       description: definition.description,
       interfaceName: name,
       properties,

@@ -10,7 +10,7 @@ import { Templater } from './templater.class';
 
 config();
 
-const DIRS_DEFAULT = 'models';
+const DIRS_DEFAULT = './models';
 
 export class SwaggerGen {
   private swaggerObject: Swagger;
@@ -22,10 +22,13 @@ export class SwaggerGen {
   private httpTransport: HttpTransport;
   private fsOperator: FsOperator;
 
-  constructor() {
+  constructor(
+    private modelsDirPath: string,
+    private templateDirPath: string,
+  ) {
     this.httpTransport = new HttpTransport();
     this.fsOperator = new FsOperator();
-    this.mustache = new Templater();
+    this.mustache = new Templater(this.templateDirPath);
     this.interfaceGenerator = new InterfaceGenerator(this.mustache);
   }
 

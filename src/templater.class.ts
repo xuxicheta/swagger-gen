@@ -1,8 +1,7 @@
 import { readFileSync } from 'fs';
 import * as mustache from 'mustache';
+import { resolve } from 'path';
 import { InterfaceImport, InterfaceProperty } from './interface-generator.class';
-
-const MODEL_TEMPLATE = 'mustache/model.mustache';
 
 export interface TemplateInterfaceData {
   description?: string;
@@ -14,7 +13,9 @@ export interface TemplateInterfaceData {
 export class Templater {
   private interfaceTemplate: string;
 
-  constructor() {
+  constructor(
+    private templateDirPath: string,
+  ) {
     this.paseTemplates();
   }
 
@@ -23,7 +24,7 @@ export class Templater {
   }
 
   private paseTemplates(): void {
-    this.interfaceTemplate = readFileSync(MODEL_TEMPLATE).toString();
+    this.interfaceTemplate = readFileSync(resolve(this.templateDirPath, 'model.mustache')).toString();
     mustache.parse(this.interfaceTemplate);
   }
 }

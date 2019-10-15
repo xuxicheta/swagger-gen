@@ -1,14 +1,17 @@
 {
   "name": "swagger-interfaces-generator",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "swagger interfaces generator",
   "main": "index.js",
   "scripts": {
     "start": "tsc && node dist/swagger-gen/index.js --env LOCAL_SWAGGER_URL",
+    "build": "tsc",
     "test": "jest"
   },
   "author": "Anton Shvets",
-  "bin": "dist/swagger-gen/cli.js",
+  "bin": {
+    "swagger-interfaces-generator": ".dist/cli.js"
+  },
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.1.0",
