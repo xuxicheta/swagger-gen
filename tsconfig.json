@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": "./",
     "target": "es2016",
     "module": "commonjs",
     "outDir": "dist/swagger-gen",
@@ -13,5 +13,5 @@
     "models",
     "dist",
     "test"
-  ]
+  ],
 }

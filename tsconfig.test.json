@@ -1,12 +1,7 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "test",
-    "target": "es2016",
-    "module": "commonjs",
     "outDir": "dist/test",
-    "sourceMap": true,
-    "declaration": true,
-    "esModuleInterop": true
   },
   "exclude": [
     "models",

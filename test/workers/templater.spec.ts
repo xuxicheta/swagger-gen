@@ -1,15 +1,16 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { templaterDummy1 } from '../../test/templater/templater.dummy.1';
-import { templaterDummy2 } from '../../test/templater/templater.dummy.2';
-import { templaterDummy3 } from '../../test/templater/templater.dummy.3';
-import { Templater } from './templater.class';
+import { templaterDummy1 } from './templater/templater.dummy.1';
+import { templaterDummy2 } from './templater/templater.dummy.2';
+import { templaterDummy3 } from './templater/templater.dummy.3';
+import { Templater } from '../../src/workers/templater.class';
 
-const mustacheDirPath = resolve(__dirname, '..', 'mustache');
+const mustacheDirPath = resolve(__dirname, '..', '..', 'mustache');
+console.log(__dirname);
 
-const sample1: string = readFileSync('./test/templater/templater.sample.1.ts').toString();
-const sample2: string = readFileSync('./test/templater/templater.sample.2.ts').toString();
-const sample3: string = readFileSync('./test/templater/templater.sample.3.ts').toString();
+const sample1: string = readFileSync('./test/workers/templater/templater.sample.1.ts').toString();
+const sample2: string = readFileSync('./test/workers/templater/templater.sample.2.ts').toString();
+const sample3: string = readFileSync('./test/workers/templater/templater.sample.3.ts').toString();
 
 describe('class should be created', () => {
   it('created', () => {

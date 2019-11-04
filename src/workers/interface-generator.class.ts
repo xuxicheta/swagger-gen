@@ -1,6 +1,6 @@
-import { Swagger, SwaggerDefinition, SwaggerPropertyDefinition, SwaggerType } from 'types/swagger';
-import { FsOperator } from 'utility/fs-operator.class';
-import { Templater } from 'workers/templater.class';
+import { Swagger, SwaggerDefinition, SwaggerPropertyDefinition, SwaggerType } from '../types/swagger';
+import { Templater } from './templater.class';
+import { FsOperator } from '../utility/fs-operator.class';
 
 export interface InterfaceProperty {
   name: string;
@@ -20,6 +20,7 @@ export class InterfaceGenerator {
   ) {}
 
   public makeInterfaces(swaggerObject: Swagger, dir: string): void {
+    console.log('writing models in ', dir);
     Object.entries(swaggerObject.definitions).forEach(([name, definition]) => {
       const fileString = this.makeOneInterfaceFileString(name, definition);
       this.fsOperator.saveInterfaceFile(dir, name, fileString);

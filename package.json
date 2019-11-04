@@ -1,6 +1,6 @@
 {
   "name": "swagger-interfaces-generator",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "swagger interfaces generator",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   },
   "author": "Anton Shvets",
   "bin": {
-    "swagger-interfaces-generator": ".dist/cli.js"
+    "swagger-interfaces-generator": "dist/swagger-gen/cli.js"
   },
   "license": "ISC",
   "dependencies": {

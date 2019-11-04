@@ -1,14 +1,10 @@
 
-import { config } from 'dotenv';
-import { Config } from 'types/config.interface';
 import { FsOperator } from './utility/fs-operator.class';
 import { HttpTransport } from './utility/http-transport.class';
 import { InterfaceGenerator } from './workers/interface-generator.class';
 import { Templater } from './workers/templater.class';
-
-config();
-
-const DIRS_DEFAULT = './models';
+import { Config } from './types/config.interface';
+import { Swagger } from './types/swagger';
 
 export class SwaggerGen {
   private mustache: Templater;
@@ -27,9 +23,8 @@ export class SwaggerGen {
 
   public async run(): Promise<void> {
     try {
-      const swaggerJSON = await this.getSwaggerObject(this.config);
-      const swaggerObject = JSON.parse(swaggerJSON);
-      const modelsDir = this.fsOperator.mkDirModels(this.config.modelsDir);
+      const swaggerObject: Swagger = await this.getSwaggerObject(this.config);
+      const modelsDir: string = this.fsOperator.mkDirModels(this.config.modelsDir);
       this.interfaceGenerator.makeInterfaces(swaggerObject, modelsDir);
 
     } catch (err) {
@@ -37,13 +32,14 @@ export class SwaggerGen {
     }
   }
 
-  private getSwaggerObject(config: Config): Promise<string> {
+  private getSwaggerObject(config: Config): Promise<Swagger> {
     if (config.file) {
-      return this.fsOperator.readFile(config.file);
+      return this.fsOperator.readFile(config.file)
+        .then(JSON.parse);
     }
 
     if (config.url) {
-      return this.httpTransport.requestObject<string>(config.url);
+      return this.httpTransport.requestObject<Swagger>(config.url);
     }
   }
 
