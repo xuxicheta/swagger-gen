@@ -1,56 +1,50 @@
 
 import { config } from 'dotenv';
-import { argv } from 'yargs';
-import { FsOperator } from './fs-operator.class';
-import { consoleHelp } from './help';
-import { HttpTransport } from './http-transport.class';
-import { InterfaceGenerator } from './interface-generator.class';
-import { Swagger } from './swagger';
-import { Templater } from './templater.class';
+import { Config } from 'types/config.interface';
+import { FsOperator } from './utility/fs-operator.class';
+import { HttpTransport } from './utility/http-transport.class';
+import { InterfaceGenerator } from './workers/interface-generator.class';
+import { Templater } from './workers/templater.class';
 
 config();
 
 const DIRS_DEFAULT = './models';
 
 export class SwaggerGen {
-  private swaggerObject: Swagger;
-  private dir: string;
-  private url: string;
-
   private mustache: Templater;
   private interfaceGenerator: InterfaceGenerator;
   private httpTransport: HttpTransport;
   private fsOperator: FsOperator;
 
   constructor(
-    private modelsDirPath: string,
-    private templateDirPath: string,
+    private config: Config,
   ) {
     this.httpTransport = new HttpTransport();
     this.fsOperator = new FsOperator();
-    this.mustache = new Templater(this.templateDirPath);
-    this.interfaceGenerator = new InterfaceGenerator(this.mustache);
+    this.mustache = new Templater(this.config.mustacheDir);
+    this.interfaceGenerator = new InterfaceGenerator(this.mustache, this.fsOperator);
   }
 
-  public run(): void {
-    this.dir = argv.dir as string || DIRS_DEFAULT;
-    this.url = argv.url as string || process.env[argv.env as string];
-    this.lookAtArgument();
+  private async run(): Promise<void> {
+    try {
+      const swaggerJSON = await this.getSwaggerObject(this.config);
+      const swaggerObject = JSON.parse(swaggerJSON);
+      const modelsDir = this.fsOperator.mkDirModels(this.config.modelsDir);
+      this.interfaceGenerator.makeInterfaces(swaggerObject, modelsDir);
+
+    } catch (err) {
+      console.error('error');
+    }
   }
 
-  private async lookAtArgument(): Promise<void> {
-    if (argv.help) {
-      consoleHelp();
-      return;
+  private getSwaggerObject(config: Config): Promise<string> {
+    if (config.file) {
+      return this.fsOperator.readFile(config.file);
     }
 
-    if (!this.url) {
-      throw new Error('url not found in environment');
+    if (config.url) {
+      return this.httpTransport.requestObject<string>(config.url);
     }
-
-    this.swaggerObject = await this.httpTransport.requestObject(this.url);
-    const existedDir = this.fsOperator.mkDirModels(this.dir);
-    this.interfaceGenerator.makeInterfaces(this.swaggerObject, existedDir);
   }
 
 }

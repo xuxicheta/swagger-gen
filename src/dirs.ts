@@ -1,2 +1,2 @@
-export const MODEL_DIRS = './models';
-export const MUSTACHE_DIRS = './mustache';
+export const MODEL_DIRS = 'models';
+export const MUSTACHE_DIRS = 'mustache';

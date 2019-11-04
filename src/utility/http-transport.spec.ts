@@ -1,5 +1,5 @@
 import { get, RequestCallback, Response } from 'request';
-import { HttpTransport } from '../src/http-transport.class';
+import { HttpTransport } from './http-transport.class';
 
 interface ResolvedResponse {
   body: string;

@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, rmdirSync } from 'fs';
 import { resolve } from 'path';
-import { FsOperator } from '../src/fs-operator.class';
+import { FsOperator } from './fs-operator.class';
 
 const DIR_NAME_1 = resolve(__dirname, 'models-test-1');
 const DIR_NAME_2 = resolve(__dirname, 'models-test-2');

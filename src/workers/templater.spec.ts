@@ -1,9 +1,9 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { Templater } from '../src/templater.class';
-import { templaterDummy1 } from './templater/templater.dummy.1';
-import { templaterDummy2 } from './templater/templater.dummy.2';
-import { templaterDummy3 } from './templater/templater.dummy.3';
+import { templaterDummy1 } from '../../test/templater/templater.dummy.1';
+import { templaterDummy2 } from '../../test/templater/templater.dummy.2';
+import { templaterDummy3 } from '../../test/templater/templater.dummy.3';
+import { Templater } from './templater.class';
 
 const mustacheDirPath = resolve(__dirname, '..', 'mustache');
 

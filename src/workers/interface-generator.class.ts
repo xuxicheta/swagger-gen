@@ -1,7 +1,6 @@
-import { writeFileSync } from 'fs';
-import { resolve } from 'path';
-import { Swagger, SwaggerDefinition, SwaggerPropertyDefinition, SwaggerType } from 'swagger';
-import { Templater } from 'templater.class';
+import { Swagger, SwaggerDefinition, SwaggerPropertyDefinition, SwaggerType } from 'types/swagger';
+import { FsOperator } from 'utility/fs-operator.class';
+import { Templater } from 'workers/templater.class';
 
 export interface InterfaceProperty {
   name: string;
@@ -17,18 +16,14 @@ export class InterfaceGenerator {
 
   constructor(
     private templater: Templater,
+    private fsOperator: FsOperator,
   ) {}
 
   public makeInterfaces(swaggerObject: Swagger, dir: string): void {
     Object.entries(swaggerObject.definitions).forEach(([name, definition]) => {
       const fileString = this.makeOneInterfaceFileString(name, definition);
-      this.saveInterfaceFile(dir, name, fileString);
+      this.fsOperator.saveInterfaceFile(dir, name, fileString);
     });
-  }
-
-  private saveInterfaceFile(dir: string, name: string, fileString: string): void {
-    const fileName = resolve(dir, `${name}.ts`);
-    writeFileSync(fileName, fileString);
   }
 
   private makeOneInterfaceFileString(name: string, definition: SwaggerDefinition): string {
