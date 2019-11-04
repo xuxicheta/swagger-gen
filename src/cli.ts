@@ -1,13 +1,11 @@
 #!/usr/bin/env node
 import {join} from 'path';
 import { SwaggerGen } from './swagger-gen';
+import { createConfig } from 'utility/args';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-console.log(__dirname);
+const config = createConfig();
 
-const swaggerGen = new SwaggerGen(
-  join(__dirname, 'models'),
-  join(__dirname, 'mustache'),
-);
+const swaggerGen = new SwaggerGen(config);
 swaggerGen.run();

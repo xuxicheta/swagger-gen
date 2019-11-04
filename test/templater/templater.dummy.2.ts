@@ -1,4 +1,4 @@
-import { TemplateInterfaceData } from '../../src/templater.class';
+import { TemplateInterfaceData } from 'workers/templater.class';
 
 export const templaterDummy2: TemplateInterfaceData = {
   interfaceName: 'TestInterface2',

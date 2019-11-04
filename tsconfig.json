@@ -9,5 +9,9 @@
     "esModuleInterop": true
   },
 
-  "exclude": ["models", "dist", "test"]
+  "exclude": [
+    "models",
+    "dist",
+    "test"
+  ]
 }

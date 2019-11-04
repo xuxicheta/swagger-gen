@@ -25,7 +25,7 @@ export class SwaggerGen {
     this.interfaceGenerator = new InterfaceGenerator(this.mustache, this.fsOperator);
   }
 
-  private async run(): Promise<void> {
+  public async run(): Promise<void> {
     try {
       const swaggerJSON = await this.getSwaggerObject(this.config);
       const swaggerObject = JSON.parse(swaggerJSON);
