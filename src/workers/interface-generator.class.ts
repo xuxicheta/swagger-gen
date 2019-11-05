@@ -21,10 +21,17 @@ export class InterfaceGenerator {
 
   public makeInterfaces(swaggerObject: Swagger, dir: string): void {
     console.log('writing models in ', dir);
+    const interfaces: string[] = [];
     Object.entries(swaggerObject.definitions).forEach(([name, definition]) => {
       const fileString = this.makeOneInterfaceFileString(name, definition);
       this.fsOperator.saveInterfaceFile(dir, name, fileString);
+      interfaces.push(name);
     });
+    const indexContent = interfaces
+      .map(name => `export { ${name} } from './${name}';\n`)
+      .sort()
+      .join('');
+    this.fsOperator.saveIndexFile(dir, indexContent);
   }
 
   private makeOneInterfaceFileString(name: string, definition: SwaggerDefinition): string {
