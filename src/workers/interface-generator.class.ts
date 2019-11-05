@@ -1,4 +1,4 @@
-import { Swagger, SwaggerDefinition, SwaggerPropertyDefinition, SwaggerType } from '../types/swagger';
+import { Swagger, SwaggerDefinition, SwaggerPropertyDefinition, SwaggerType, SwaggerFormat } from '../types/swagger';
 import { Templater } from './templater.class';
 import { FsOperator } from '../utility/fs-operator.class';
 
@@ -22,11 +22,13 @@ export class InterfaceGenerator {
   public makeInterfaces(swaggerObject: Swagger, dir: string): void {
     console.log('writing models in ', dir);
     const interfaces: string[] = [];
+
     Object.entries(swaggerObject.definitions).forEach(([name, definition]) => {
       const fileString = this.makeOneInterfaceFileString(name, definition);
       this.fsOperator.saveInterfaceFile(dir, name, fileString);
       interfaces.push(name);
     });
+
     const indexContent = interfaces
       .map(name => `export { ${name} } from './${name}';\n`)
       .sort()
@@ -67,17 +69,25 @@ export class InterfaceGenerator {
       case 'array':
         return property.items.$ref
           ? property.items.$ref.replace('#/definitions/', '') + '[]'
-          : `${this.parseType(property.items.type)}[]`;
+          : `${this.parseType(property.items.type as SwaggerType)}[]`;
 
       default:
-        return this.parseType(property.type);
+        return this.parseType(property.type, property.format);
     }
   }
 
-  private parseType(type: SwaggerType | string): string {
+  private parseType(type: SwaggerType, format?: SwaggerFormat): string {
     switch (type) {
       case 'integer':
         return 'number';
+
+      case 'string':
+        if (format === 'date-time') {
+          return 'Date';
+        } else {
+          return 'string';
+        }
+
       default:
         return type;
     }
