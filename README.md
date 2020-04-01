@@ -1,1 +1,1 @@
-# subscription-collector
+# swagger-interfaces-generator

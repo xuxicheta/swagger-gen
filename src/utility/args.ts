@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 import { argv } from 'yargs';
-import { MODEL_DIRS, MUSTACHE_DIRS } from '../dirs';
+import { MODEL_DIR, MUSTACHE_DIR } from '../defaults';
 import { consoleHelp } from '../help';
 import { Config } from '../types/config.interface';
 
@@ -16,8 +16,8 @@ export function createConfig(rootDir: string): Config {
 
   config.url = argv.url as string;
   config.file = argv.file as string;
-  config.mustacheDir = argv.mustacheDir as string || resolve(rootDir, MUSTACHE_DIRS);
-  config.modelsDir = argv.modelsDir as string || resolve(process.cwd(), MODEL_DIRS);
+  config.mustacheDir = argv.mustacheDir as string || resolve(rootDir, MUSTACHE_DIR);
+  config.modelsDir = argv.modelsDir as string || resolve(process.cwd(), MODEL_DIR);
 
   return config;
 }
