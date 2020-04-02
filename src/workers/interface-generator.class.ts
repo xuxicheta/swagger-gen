@@ -1,4 +1,4 @@
-import { Swagger, SwaggerDefinition, SwaggerPropertyDefinition, SwaggerType, SwaggerFormat } from '../types/swagger';
+import { Swagger, SwaggerDefinition, SwaggerPropertyDefinition, SwaggerType, SwaggerFormat, SwaggerDefinitions } from '../types/swagger';
 import { Templater } from './templater.class';
 import { FsOperator } from '../utility/fs-operator.class';
 
@@ -12,6 +12,12 @@ export interface InterfaceImport {
   importedName: string;
 }
 
+interface SwaggerV3Object {
+  components: {
+    schemas: SwaggerDefinitions;
+  };
+}
+
 export class InterfaceGenerator {
 
   constructor(
@@ -21,19 +27,24 @@ export class InterfaceGenerator {
 
   public makeInterfaces(swaggerObject: Swagger, dir: string): void {
     console.log('writing models in ', dir);
-    const interfaces: string[] = [];
 
-    Object.entries(swaggerObject.definitions).forEach(([name, definition]) => {
-      const fileString = this.makeOneInterfaceFileString(name, definition);
-      this.fsOperator.saveInterfaceFile(dir, name, fileString);
-      interfaces.push(name);
-    });
+    const definitions: SwaggerDefinitions = swaggerObject.definitions // OpenAPI v2
+      || (swaggerObject as unknown as SwaggerV3Object).components.schemas; // OpenAPI v3
+    const interfaces = this.runDefinitions(definitions, dir);
 
     const indexContent = interfaces
       .map(name => `export { ${name} } from './${name}';\n`)
       .sort()
       .join('');
     this.fsOperator.saveIndexFile(dir, indexContent);
+  }
+
+  private runDefinitions(definitions: SwaggerDefinitions, dir: string): string[] {
+    return Object.entries(definitions).map(([name, definition]) => {
+      const fileString = this.makeOneInterfaceFileString(name, definition);
+      this.fsOperator.saveInterfaceFile(dir, name, fileString);
+      return name;
+    });
   }
 
   private makeOneInterfaceFileString(name: string, definition: SwaggerDefinition): string {

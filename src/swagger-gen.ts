@@ -28,7 +28,7 @@ export class SwaggerGen {
       this.interfaceGenerator.makeInterfaces(swaggerObject, modelsDir);
 
     } catch (err) {
-      console.error('error');
+      console.error(err);
     }
   }
 
