@@ -30,21 +30,19 @@ export class InterfaceGenerator {
 
     const definitions: SwaggerDefinitions = swaggerObject.definitions // OpenAPI v2
       || (swaggerObject as unknown as SwaggerV3Object).components.schemas; // OpenAPI v3
-    const interfaces = this.runDefinitions(definitions, dir);
 
-    const indexContent = interfaces
+    const interfaceNames: string[] = Object.keys(definitions);
+    const interfaceFileStrings: string[] = Object.entries(definitions)
+      .map(([name, definition]) => this.makeOneInterfaceFileString(name, definition));
+
+    interfaceFileStrings
+      .forEach((fileString: string, i: number) => this.fsOperator.saveInterfaceFile(dir, interfaceNames[i], fileString));
+
+    const barrelFileContent = interfaceNames
       .map(name => `export { ${name} } from './${name}';\n`)
       .sort()
       .join('');
-    this.fsOperator.saveIndexFile(dir, indexContent);
-  }
-
-  private runDefinitions(definitions: SwaggerDefinitions, dir: string): string[] {
-    return Object.entries(definitions).map(([name, definition]) => {
-      const fileString = this.makeOneInterfaceFileString(name, definition);
-      this.fsOperator.saveInterfaceFile(dir, name, fileString);
-      return name;
-    });
+    this.fsOperator.saveIndexFile(dir, barrelFileContent);
   }
 
   private makeOneInterfaceFileString(name: string, definition: SwaggerDefinition): string {
@@ -79,12 +77,24 @@ export class InterfaceGenerator {
     switch (property.type) {
       case 'array':
         return property.items.$ref
-          ? property.items.$ref.replace('#/definitions/', '') + '[]'
+          ? `${this.cleanRef(property.items.$ref)}[]`
           : `${this.parseType(property.items.type as SwaggerType)}[]`;
-
+      case 'string':
+      case 'integer':
+      case 'number':
+      case 'boolean': return this.parseType(property.type, property.format);
       default:
-        return this.parseType(property.type, property.format);
+        return this.cleanRef(property.$ref);
     }
+  }
+
+  private cleanRef($ref: string): string {
+    if (!$ref) {
+      throw new Error('No ref$ to clean');
+    }
+    return $ref
+      .replace('#/definitions/', '')
+      .replace('#/components/schemas/', '');
   }
 
   private parseType(type: SwaggerType, format?: SwaggerFormat): string {
@@ -105,15 +115,26 @@ export class InterfaceGenerator {
   }
 
   private extractImport(name: string, property: SwaggerPropertyDefinition): { importedName: string } {
-    if (property.type === 'array' && property.items.$ref) {
-      const importedName = property.items.$ref.replace('#/definitions/', '');
-
-      if (name !== importedName) {
-        return {
-          importedName,
-        };
-      }
+    if (['string', 'integer', 'number', 'boolean'].includes(property.type)) {
+      return;
     }
-    return undefined;
+
+    let importedName: string;
+
+    if (property.type === 'array' && property.items.$ref) {
+      importedName = this.cleanRef(property.items.$ref);
+    }
+
+    if (property.$ref) {
+      importedName = this.cleanRef(property.$ref);
+    }
+
+    if (name === importedName) {
+      return;
+    }
+
+    return {
+      importedName,
+    };
   }
 }
