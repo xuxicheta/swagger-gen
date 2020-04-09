@@ -23,7 +23,7 @@ export class InterfaceGenerator {
   constructor(
     private templater: Templater,
     private fsOperator: FsOperator,
-  ) {}
+  ) { }
 
   public makeInterfaces(swaggerObject: Swagger, dir: string): void {
     console.log('writing models in ', dir);
@@ -46,8 +46,8 @@ export class InterfaceGenerator {
   }
 
   private makeOneInterfaceFileString(name: string, definition: SwaggerDefinition): string {
-    const properties = this.makeProperties(definition);
-    const imports = this.makeImports(name, definition);
+    const properties: InterfaceProperty[] = this.makeProperties(definition);
+    const imports: InterfaceImport[] = this.makeImports(name, definition);
 
     return this.templater.renderInterface({
       description: definition.description,
@@ -105,16 +105,15 @@ export class InterfaceGenerator {
       case 'string':
         if (format === 'date-time') {
           return 'Date';
-        } else {
-          return 'string';
         }
+        return 'string';
 
       default:
         return type;
     }
   }
 
-  private extractImport(name: string, property: SwaggerPropertyDefinition): { importedName: string } {
+  private extractImport(name: string, property: SwaggerPropertyDefinition): InterfaceImport {
     if (['string', 'integer', 'number', 'boolean'].includes(property.type)) {
       return;
     }
