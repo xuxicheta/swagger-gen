@@ -8,37 +8,48 @@ export interface InterfaceProperty {
   type: string;
 }
 
+export interface EnumProperty {
+  name: string;
+  value: string;
+}
+
 export interface InterfaceImport {
   importedName: string;
 }
 
-interface SwaggerV3Object {
+export interface SwaggerV3Object {
   components: {
     schemas: SwaggerDefinitions;
   };
 }
 
-export class InterfaceGenerator {
+export class TypesGenerator {
 
   constructor(
     private templater: Templater,
     private fsOperator: FsOperator,
   ) { }
 
-  public makeInterfaces(swaggerObject: Swagger, dir: string): void {
+  public makeTypes(swaggerObject: Swagger, dir: string): void {
     console.log('writing models in ', dir);
 
     const definitions: SwaggerDefinitions = swaggerObject.definitions // OpenAPI v2
       || (swaggerObject as unknown as SwaggerV3Object).components.schemas; // OpenAPI v3
 
-    const interfaceNames: string[] = Object.keys(definitions);
-    const interfaceFileStrings: string[] = Object.entries(definitions)
-      .map(([name, definition]) => this.makeOneInterfaceFileString(name, definition));
+    const typeNames: string[] = Object.keys(definitions);
+    const fileStrings: string[] = Object.entries(definitions)
+        .map(([name, definition]) => {
+          if (definition.enum) {
+            return this.makeOneEnumFileString(name, definition);
+          } else {
+            return this.makeOneInterfaceFileString(name, definition);
+          }
+        });
 
-    interfaceFileStrings
-      .forEach((fileString: string, i: number) => this.fsOperator.saveInterfaceFile(dir, interfaceNames[i], fileString));
+    fileStrings
+      .forEach((fileString: string, i: number) => this.fsOperator.saveInterfaceFile(dir, typeNames[i], fileString));
 
-    const barrelFileContent = interfaceNames
+    const barrelFileContent = typeNames
       .map(name => `export { ${name} } from './${name}';\n`)
       .sort()
       .join('');
@@ -51,9 +62,20 @@ export class InterfaceGenerator {
 
     return this.templater.renderInterface({
       description: definition.description,
-      interfaceName: name,
+      name,
       properties,
       imports,
+    });
+  }
+
+  private makeOneEnumFileString(name: string, definition: SwaggerDefinition): string {
+    return this.templater.renderEnum({
+      description: definition.description,
+      name,
+      properties: definition.enum.map(x => ({
+        name: x.toUpperCase(),
+        value: x
+      }))
     });
   }
 

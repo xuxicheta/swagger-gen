@@ -1,17 +1,25 @@
 import { readFileSync } from 'fs';
 import * as mustache from 'mustache';
 import { resolve } from 'path';
-import { InterfaceImport, InterfaceProperty } from './interface-generator.class';
+import { EnumProperty, InterfaceImport, InterfaceProperty } from './interface-generator.class';
 
-export interface TemplateInterfaceData {
+export interface TemplateTypeData {
   description?: string;
-  interfaceName: string;
+  name: string;
+}
+
+export interface TemplateInterfaceData extends TemplateTypeData {
   properties: InterfaceProperty[];
   imports: InterfaceImport[];
 }
 
+export interface TemplateEnumData extends TemplateTypeData {
+  properties: EnumProperty[];
+}
+
 export class Templater {
   private interfaceTemplate: string;
+  private enumTemplate: string;
 
   constructor(
     private templateDirPath: string,
@@ -23,8 +31,12 @@ export class Templater {
     return mustache.render(this.interfaceTemplate, data);
   }
 
+  public renderEnum(data: TemplateEnumData): string {
+    return mustache.render(this.enumTemplate, data);
+  }
+
   private paseTemplates(): void {
-    this.interfaceTemplate = readFileSync(resolve(this.templateDirPath, 'model.mustache')).toString();
-    mustache.parse(this.interfaceTemplate);
+    this.interfaceTemplate = readFileSync(resolve(this.templateDirPath, 'interface-model.mustache')).toString();
+    this.enumTemplate = readFileSync(resolve(this.templateDirPath, 'enum-model.mustache')).toString();
   }
 }

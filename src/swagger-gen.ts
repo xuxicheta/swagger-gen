@@ -1,14 +1,14 @@
 
 import { FsOperator } from './utility/fs-operator.class';
 import { HttpTransport } from './utility/http-transport.class';
-import { InterfaceGenerator } from './workers/interface-generator.class';
+import { TypesGenerator } from './workers/interface-generator.class';
 import { Templater } from './workers/templater.class';
 import { Config } from './types/config.interface';
 import { Swagger } from './types/swagger';
 
 export class SwaggerGen {
   private mustache: Templater;
-  private interfaceGenerator: InterfaceGenerator;
+  private typesGenerator: TypesGenerator;
   private httpTransport: HttpTransport;
   private fsOperator: FsOperator;
 
@@ -18,14 +18,14 @@ export class SwaggerGen {
     this.httpTransport = new HttpTransport();
     this.fsOperator = new FsOperator();
     this.mustache = new Templater(this.config.mustacheDir);
-    this.interfaceGenerator = new InterfaceGenerator(this.mustache, this.fsOperator);
+    this.typesGenerator = new TypesGenerator(this.mustache, this.fsOperator);
   }
 
   public async run(): Promise<void> {
     try {
       const swaggerObject: Swagger = await this.getSwaggerObject(this.config);
       const modelsDir: string = this.fsOperator.mkDirModels(this.config.modelsDir);
-      this.interfaceGenerator.makeInterfaces(swaggerObject, modelsDir);
+      this.typesGenerator.makeTypes(swaggerObject, modelsDir);
 
     } catch (err) {
       console.error(err);

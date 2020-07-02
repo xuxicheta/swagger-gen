@@ -1,7 +1,7 @@
 import { TemplateInterfaceData } from '../../../src/workers/templater.class';
 
 export const templaterDummy1: TemplateInterfaceData = {
-  interfaceName: 'TestInterface1',
+  name: 'TestInterface1',
   properties: [],
   imports: [],
 };
