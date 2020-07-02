@@ -1,7 +1,7 @@
 import { TemplateInterfaceData } from '../../../src/workers/templater.class';
 
 export const templaterDummy3: TemplateInterfaceData = {
-  interfaceName: 'TestInterface3',
+  name: 'TestInterface3',
   properties: [
     { name: 'prop1', description: 'test1 prop', type: 'TestInterface1' },
     { name: 'prop2', description: '', type: 'TestInterface2' },

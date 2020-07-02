@@ -1,0 +1,14 @@
+{{#imports}}
+import { {{ importedName }} } from './{{ importedName }}';
+{{/imports}}
+{{#imports.0}}
+
+{{/imports.0}}
+{{#description}}
+/** {{ description }} */
+{{/description}}
+export enum {{ name}} {
+  {{#properties}}
+  {{name}} = '{{value}}',
+  {{/properties}}
+}
