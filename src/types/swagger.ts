@@ -80,6 +80,7 @@ export interface SwaggerPropertyDefinition extends Schema {
   readonly?: boolean;
   enum?: string[];
   type: SwaggerType;
+  nullable?: boolean;
 }
 
 export type SwaggerType = 'integer' | 'number' | 'string' | 'boolean'|'array';

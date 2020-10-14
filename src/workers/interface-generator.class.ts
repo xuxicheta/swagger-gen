@@ -85,6 +85,7 @@ export class TypesGenerator {
         name,
         description: property.description,
         type: this.extractPropertyType(property),
+        nullable: property.nullable || false,
       };
     });
   }
