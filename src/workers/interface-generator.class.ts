@@ -85,6 +85,7 @@ export class TypesGenerator {
         name,
         description: property.description,
         type: this.extractPropertyType(property),
+        nullable: property.nullable || false,
       };
     });
   }
@@ -106,7 +107,7 @@ export class TypesGenerator {
       case 'number':
       case 'boolean': return this.parseType(property.type, property.format);
       default:
-        return this.cleanRef(property.$ref);
+        return property.$ref? this.cleanRef(property.$ref) : 'any';
     }
   }
 
