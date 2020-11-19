@@ -17,9 +17,12 @@ export class SwaggerGen {
 
   public async run(): Promise<void> {
     try {
-      const swaggerObject = await getSwagger(this.config);
-      const modelsDir = makeModelsDirectory(this.config.modelsDir);
-      this.typesGenerator.makeTypes(swaggerObject, modelsDir);
+      makeModelsDirectory(this.config.modelsDir);
+
+      this.typesGenerator.makeTypes(
+        await getSwagger(this.config),
+        this.config.modelsDir,
+      );
 
     } catch (err) {
       console.error(err);
