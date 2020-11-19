@@ -2,3 +2,4 @@
 models
 dist
 node_modules
+/swagger.json

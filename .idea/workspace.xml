@@ -20,10 +20,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15b867f5-5890-4a44-b0fa-2725333a7699" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.npmignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utility/get-swagger.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utility/make-models-directory.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utility/http-transport.class.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utility/http-transport.class.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/defaults.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/defaults.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/help.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/console-help.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/swagger-gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/swagger-gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utility/create-config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utility/create-config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utility/fs-operator.class.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utility/fs-operator.class.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utility/http-transport.class.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utility/request-json.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/workers/interface-generator.class.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/workers/interface-generator.class.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/workers/request-generator.class.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/utility/http-transport.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/test/utility/http-transport.spec.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +56,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_MARK_IGNORED_FILES_AS_EXCLUDED" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -64,7 +78,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1605789577737</updated>
-      <workItem from="1605789578771" duration="2463000" />
+      <workItem from="1605789578771" duration="5983000" />
     </task>
     <task id="LOCAL-00001" summary="minor">
       <created>1605789799295</created>
@@ -80,7 +94,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605792439342</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="remove request">
+      <created>1605793052660</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1605793052660</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -99,7 +120,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="minor" />
-    <option name="LAST_COMMIT_MESSAGE" value="minor" />
+    <MESSAGE value="remove request" />
+    <MESSAGE value="refactor get swagger" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor get swagger" />
   </component>
   <component name="WindowStateProjectService">
     <state x="693" y="338" width="526" height="501" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1605792225589">
@@ -122,5 +145,21 @@
       <screen x="0" y="0" width="1920" height="1171" />
     </state>
     <state x="464" y="223" width="992" height="731" key="SettingsEditor/0.0.1920.1171@0.0.1920.1171" timestamp="1605791945310" />
+    <state x="666" y="337" width="587" height="502" key="find.popup" timestamp="1605795095649">
+      <screen x="0" y="0" width="1920" height="1171" />
+    </state>
+    <state x="666" y="337" width="587" height="502" key="find.popup/0.0.1920.1171@0.0.1920.1171" timestamp="1605795095649" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/utility/request-json.ts</url>
+          <line>5</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

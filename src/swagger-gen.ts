@@ -1,16 +1,14 @@
-
 import { FsOperator } from './utility/fs-operator.class';
-import { HttpTransport } from './utility/http-transport.class';
 import { TypesGenerator } from './workers/interface-generator.class';
 import { Templater } from './workers/templater.class';
 import { Config } from './types/config.interface';
-import { Swagger } from './types/swagger';
+import { getSwagger } from './utility/get-swagger';
+import { makeModelsDirectory } from './utility/make-models-directory';
 
 export class SwaggerGen {
   private readonly mustache = new Templater(this.config.mustacheDir);
   private readonly fsOperator = new FsOperator();
-  private typesGenerator = new TypesGenerator(this.mustache, this.fsOperator);
-  private httpTransport = new HttpTransport();
+  private readonly typesGenerator = new TypesGenerator(this.mustache, this.fsOperator);
 
   constructor(
     private config: Config,
@@ -19,24 +17,12 @@ export class SwaggerGen {
 
   public async run(): Promise<void> {
     try {
-      const swaggerObject: Swagger = await this.getSwaggerObject(this.config);
-      const modelsDir: string = this.fsOperator.mkDirModels(this.config.modelsDir);
+      const swaggerObject = await getSwagger(this.config);
+      const modelsDir = makeModelsDirectory(this.config.modelsDir);
       this.typesGenerator.makeTypes(swaggerObject, modelsDir);
 
     } catch (err) {
       console.error(err);
     }
   }
-
-  private getSwaggerObject(config: Config): Promise<Swagger> {
-    if (config.file) {
-      return this.fsOperator.readFile(config.file)
-        .then(JSON.parse);
-    }
-
-    if (config.url) {
-      return this.httpTransport.requestObject<Swagger>(config.url);
-    }
-  }
-
 }

@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 import { argv } from 'yargs';
 import { MODEL_DIR, MUSTACHE_DIR } from '../defaults';
-import { consoleHelp } from '../help';
+import { consoleHelp } from '../console-help';
 import { Config } from '../types/config.interface';
 
 export function createConfig(rootDir: string): Config {

@@ -107,7 +107,7 @@ export class TypesGenerator {
       case 'number':
       case 'boolean': return this.parseType(property.type, property.format);
       default:
-        return property.$ref? this.cleanRef(property.$ref) : 'any';
+        return property.$ref ? this.cleanRef(property.$ref) : 'any';
     }
   }
 

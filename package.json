@@ -4,7 +4,8 @@
   "description": "swagger interfaces generator",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && node dist/swagger-gen/index.js --url https://localhost:5001/swagger/v1/swagger.json",
+    "start:url": "tsc && node dist/swagger-gen/index.js --url=https://localhost:5001/swagger/v1/swagger.json",
+    "start:file": "tsc && node dist/swagger-gen/index.js --file=https://localhost:5001/swagger/v1/swagger.json",
     "build": "tsc",
     "test": "jest"
   },
@@ -14,7 +15,6 @@
   },
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^8.1.0",
     "mustache": "^3.1.0",
     "yargs": "^14.0.0"
   },
@@ -29,7 +29,6 @@
     "typescript"
   ],
   "devDependencies": {
-    "@types/dotenv": "^6.1.1",
     "@types/jest": "^24.0.18",
     "@types/mustache": "^0.8.32",
     "@types/node": "^12.7.11",
