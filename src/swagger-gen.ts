@@ -7,18 +7,14 @@ import { Config } from './types/config.interface';
 import { Swagger } from './types/swagger';
 
 export class SwaggerGen {
-  private mustache: Templater;
-  private typesGenerator: TypesGenerator;
-  private httpTransport: HttpTransport;
-  private fsOperator: FsOperator;
+  private readonly mustache = new Templater(this.config.mustacheDir);
+  private readonly fsOperator = new FsOperator();
+  private typesGenerator = new TypesGenerator(this.mustache, this.fsOperator);
+  private httpTransport = new HttpTransport();
 
   constructor(
     private config: Config,
   ) {
-    this.httpTransport = new HttpTransport();
-    this.fsOperator = new FsOperator();
-    this.mustache = new Templater(this.config.mustacheDir);
-    this.typesGenerator = new TypesGenerator(this.mustache, this.fsOperator);
   }
 
   public async run(): Promise<void> {

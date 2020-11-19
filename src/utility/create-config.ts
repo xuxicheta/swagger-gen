@@ -12,14 +12,12 @@ export function createConfig(rootDir: string): Config {
 
   checkUrlAndFile(argv);
 
-  const config: Config = {} as Config;
-
-  config.url = argv.url as string;
-  config.file = argv.file as string;
-  config.mustacheDir = argv.mustacheDir as string || resolve(rootDir, MUSTACHE_DIR);
-  config.modelsDir = argv.modelsDir as string || resolve(process.cwd(), MODEL_DIR);
-
-  return config;
+  return {
+    url: argv.url as string,
+    file: argv.file as string,
+    mustacheDir: argv.mustacheDir as string || resolve(rootDir, MUSTACHE_DIR),
+    modelsDir: argv.modelsDir as string || resolve(process.cwd(), MODEL_DIR),
+  };
 }
 
 function checkUrlAndFile(_argv: typeof argv): void {

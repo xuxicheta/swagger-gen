@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { createConfig } from './utility/args';
+import { createConfig } from './utility/create-config';
 import { SwaggerGen } from './swagger-gen';
 import { join } from 'path';
 

@@ -1,7 +1,7 @@
 import { config as dotenvConfig } from 'dotenv';
 import { join } from 'path';
 import { SwaggerGen } from './swagger-gen';
-import { createConfig } from './utility/args';
+import { createConfig } from './utility/create-config';
 
 const rootDir = join(__dirname, '..', '..');
 
