@@ -7,9 +7,4 @@ export class FsOperator {
     const fileName = resolve(dir, `${name}.ts`);
     writeFileSync(fileName, fileString);
   }
-
-  public saveIndexFile(dir: string, fileString: string): void {
-    const fileName = resolve(dir, `index.ts`);
-    writeFileSync(fileName, fileString);
-  }
 }

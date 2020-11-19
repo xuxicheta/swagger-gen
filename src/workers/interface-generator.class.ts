@@ -48,23 +48,15 @@ export class TypesGenerator {
 
     fileStrings
       .forEach((fileString: string, i: number) => this.fsOperator.saveInterfaceFile(dir, typeNames[i], fileString));
-
-    const barrelFileContent = typeNames
-      .map(name => `export { ${name} } from './${name}';\n`)
-      .sort()
-      .join('');
-    this.fsOperator.saveIndexFile(dir, barrelFileContent);
   }
 
   private makeOneInterfaceFileString(name: string, definition: SwaggerDefinition): string {
-    const properties: InterfaceProperty[] = this.makeProperties(definition);
-    const imports: InterfaceImport[] = this.makeImports(name, definition);
 
     return this.templater.renderInterface({
       description: definition.description,
       name,
-      properties,
-      imports,
+      properties: this.makeProperties(definition),
+      imports: this.makeImports(name, definition),
     });
   }
 
