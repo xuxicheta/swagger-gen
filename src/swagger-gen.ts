@@ -24,7 +24,7 @@ export class SwaggerGen {
         this.config.modelsDir,
       );
 
-      console.log(`${count} successfully created`);
+      console.log(`${count} models successfully created`);
 
     } catch (err) {
       console.error(err);
