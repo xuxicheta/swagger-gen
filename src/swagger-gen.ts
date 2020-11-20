@@ -19,10 +19,12 @@ export class SwaggerGen {
     try {
       makeModelsDirectory(this.config.modelsDir);
 
-      this.typesGenerator.makeTypes(
+      const count = await this.typesGenerator.makeTypes(
         await getSwagger(this.config),
         this.config.modelsDir,
       );
+
+      console.log(`${count} successfully created`);
 
     } catch (err) {
       console.error(err);

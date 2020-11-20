@@ -1,4 +1,4 @@
-import { Swagger, SwaggerDefinition, SwaggerPropertyDefinition, SwaggerType, SwaggerFormat, SwaggerDefinitions } from '../types/swagger';
+import { Swagger, SwaggerDefinition, SwaggerDefinitions, SwaggerFormat, SwaggerPropertyDefinition, SwaggerType } from '../types/swagger';
 import { Templater } from './templater.class';
 import { FsOperator } from '../utility/fs-operator.class';
 
@@ -28,9 +28,10 @@ export class TypesGenerator {
   constructor(
     private templater: Templater,
     private fsOperator: FsOperator,
-  ) { }
+  ) {
+  }
 
-  public makeTypes(swaggerObject: Swagger, dir: string): void {
+  public makeTypes(swaggerObject: Swagger, dir: string): number {
     console.log('writing models in ', dir);
 
     const definitions: SwaggerDefinitions = swaggerObject.definitions // OpenAPI v2
@@ -38,16 +39,18 @@ export class TypesGenerator {
 
     const typeNames: string[] = Object.keys(definitions);
     const fileStrings: string[] = Object.entries(definitions)
-        .map(([name, definition]) => {
-          if (definition.enum) {
-            return this.makeOneEnumFileString(name, definition);
-          } else {
-            return this.makeOneInterfaceFileString(name, definition);
-          }
-        });
+      .map(([name, definition]) => {
+        if (definition.enum) {
+          return this.makeOneEnumFileString(name, definition);
+        } else {
+          return this.makeOneInterfaceFileString(name, definition);
+        }
+      });
 
     fileStrings
       .forEach((fileString: string, i: number) => this.fsOperator.saveInterfaceFile(dir, typeNames[i], fileString));
+
+    return fileStrings.length;
   }
 
   private makeOneInterfaceFileString(name: string, definition: SwaggerDefinition): string {
@@ -97,7 +100,8 @@ export class TypesGenerator {
       case 'string':
       case 'integer':
       case 'number':
-      case 'boolean': return this.parseType(property.type, property.format);
+      case 'boolean':
+        return this.parseType(property.type, property.format);
       default:
         return property.$ref ? this.cleanRef(property.$ref) : 'any';
     }
