@@ -1,6 +1,11 @@
-import { get } from 'http';
+import { get as getHttp } from 'http';
+import { get as getHttps } from 'https';
 
-export function requestJSON(url: string): Promise<string> {
+export function requestJSON(urlString: string): Promise<string> {
+
+  const url = new URL(urlString);
+  const get = url.protocol === 'https:' ? getHttps : getHttp;
+
   console.log(`getting json from ${url} ...`);
   return new Promise<string>((resolve: (value: string) => void, reject: (error: Error) => void) => {
     get(url, (res) => {
