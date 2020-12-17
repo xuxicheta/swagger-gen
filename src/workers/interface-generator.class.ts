@@ -31,8 +31,15 @@ export class InterfaceGenerator {
   ) {
   }
 
-  public makeTypes(swaggerObject: Swagger, dir: string): number {
+  public makeTypes(swaggerObjects: Swagger[], dir: string): number {
     console.log('writing models in ', dir);
+
+    return swaggerObjects.reduce((acc, el) => {
+      return acc + this.makeTypesForOneSwagger(el, dir);
+    }, 0);
+  }
+
+  makeTypesForOneSwagger(swaggerObject: Swagger, dir: string): number {
 
     const definitions: SwaggerDefinitions = swaggerObject.definitions // OpenAPI v2
       || (swaggerObject as unknown as SwaggerV3Object).components.schemas; // OpenAPI v3
@@ -88,7 +95,7 @@ export class InterfaceGenerator {
   private makeImports(name: string, definition: SwaggerDefinition): InterfaceImport[] {
     return Object.values(definition.properties)
       .map(property => this.extractImport(name, property))
-      .filter(Boolean);
+      .filter(imp => imp?.importedName);
   }
 
   private extractPropertyType(property: SwaggerPropertyDefinition): string {

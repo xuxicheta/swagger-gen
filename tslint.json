@@ -38,11 +38,6 @@
       true,
       200
     ],
-    "member-access": [
-      true,
-      "check-parameter-property",
-      "check-accessor"
-    ],
     "member-ordering": [
       true,
       {

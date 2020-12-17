@@ -1,7 +1,5 @@
-import {  } from 'fs';
-import { resolve, join } from 'path';
-import { writeFileSync, mkdirSync, readdirSync, unlinkSync } from 'fs';
-
+import { join, resolve } from 'path';
+import { mkdirSync, readdirSync, unlinkSync, writeFileSync } from 'fs';
 
 export class Output {
   saveInterfaceFile(dir: string, name: string, fileString: string): void {
@@ -17,7 +15,7 @@ export class Output {
         throw error;
       }
     }
-  
+
     readdirSync(dir).forEach(file => {
       unlinkSync(join(dir, file));
     });

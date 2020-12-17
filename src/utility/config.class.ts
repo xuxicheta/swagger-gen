@@ -3,13 +3,12 @@ import { argv } from 'yargs';
 import { consoleHelp } from '../console-help';
 
 export class Config {
-  private readonly MODEL_DIR = 'models';
-  private readonly API_DIR = 'api';
-  private readonly MUSTACHE_DIR = 'mustache';
-  url?: string;
-  file?: string;
+  urls?: string[];
+  strings?: string[];
   modelsDir: string;
   mustacheDir: string;
+  private readonly MODEL_DIR = 'models';
+  private readonly MUSTACHE_DIR = 'mustache';
 
   constructor(rootDir: string) {
     if (argv.help) {
@@ -19,8 +18,8 @@ export class Config {
 
     this.checkUrlAndFile(argv);
 
-    this.url = argv.url as string;
-    this.file = argv.file as string;
+    this.urls = [].concat(argv.url as string|string[]).filter(Boolean);
+    this.strings = [].concat(argv.file as string|string[]).filter(Boolean);
     this.mustacheDir = argv.mustacheDir as string || resolve(rootDir, this.MUSTACHE_DIR);
     this.modelsDir = argv.modelsDir as string || resolve(process.cwd(), this.MODEL_DIR);
   }

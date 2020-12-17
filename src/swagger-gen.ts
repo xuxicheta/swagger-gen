@@ -1,13 +1,9 @@
-
 import { InterfaceGenerator } from './workers/interface-generator.class';
-import { Templater } from './workers/templater.class';
 import { Config } from './utility/config.class';
 import { SwaggerRetriever } from './utility/swagger-retriever.class';
-import { Output} from './utility/output.class';
+import { Output } from './utility/output.class';
 
 export class SwaggerGen {
-  
-
   constructor(
     private config: Config,
     private output: Output,
