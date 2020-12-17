@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import * as mustache from 'mustache';
 import { resolve } from 'path';
+import { Config } from 'src/utility/config.class';
 import { EnumProperty, InterfaceImport, InterfaceProperty } from './interface-generator.class';
 
 export interface TemplateTypeData {
@@ -22,7 +23,7 @@ export class Templater {
   private enumTemplate: string;
 
   constructor(
-    private templateDirPath: string,
+    private config: Config,
   ) {
     this.paseTemplates();
   }
@@ -36,7 +37,7 @@ export class Templater {
   }
 
   private paseTemplates(): void {
-    this.interfaceTemplate = readFileSync(resolve(this.templateDirPath, 'interface-model.mustache')).toString();
-    this.enumTemplate = readFileSync(resolve(this.templateDirPath, 'enum-model.mustache')).toString();
+    this.interfaceTemplate = readFileSync(resolve(this.config.mustacheDir, 'interface-model.mustache')).toString();
+    this.enumTemplate = readFileSync(resolve(this.config.mustacheDir, 'enum-model.mustache')).toString();
   }
 }

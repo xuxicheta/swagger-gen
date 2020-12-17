@@ -1,6 +1,6 @@
+import { Output } from 'src/utility/output.class';
 import { Swagger, SwaggerDefinition, SwaggerDefinitions, SwaggerFormat, SwaggerPropertyDefinition, SwaggerType } from '../types/swagger';
 import { Templater } from './templater.class';
-import { FsOperator } from '../utility/fs-operator.class';
 
 export interface InterfaceProperty {
   name: string;
@@ -23,11 +23,11 @@ export interface SwaggerV3Object {
   };
 }
 
-export class TypesGenerator {
+export class InterfaceGenerator {
 
   constructor(
     private templater: Templater,
-    private fsOperator: FsOperator,
+    private output: Output,
   ) {
   }
 
@@ -48,7 +48,7 @@ export class TypesGenerator {
       });
 
     fileStrings
-      .forEach((fileString: string, i: number) => this.fsOperator.saveInterfaceFile(dir, typeNames[i], fileString));
+      .forEach((fileString: string, i: number) => this.output.saveInterfaceFile(dir, typeNames[i], fileString));
 
     return fileStrings.length;
   }
