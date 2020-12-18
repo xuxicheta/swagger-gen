@@ -1,51 +1,15 @@
-import { Output } from 'src/utility/output.class';
-import { Swagger, SwaggerDefinition, SwaggerDefinitions, SwaggerFormat, SwaggerPropertyDefinition, SwaggerType } from '../types/swagger';
-import { Templater } from './templater.class';
+import { Swagger, SwaggerDefinition, SwaggerDefinitions, SwaggerFormat, SwaggerPropertyDefinition, SwaggerType } from './types/swagger';
+import { InterfaceImport, InterfaceProperty, isSwaggerV3, TypeObject } from './types/types';
 
-export interface InterfaceProperty {
-  name: string;
-  description: string;
-  type: string;
-}
-
-export interface EnumProperty {
-  name: string;
-  value: string;
-}
-
-export interface InterfaceImport {
-  importedName: string;
-}
-
-export interface SwaggerV3Object {
-  components: {
-    schemas: SwaggerDefinitions;
-  };
-}
-
-export class InterfaceGenerator {
-
-  constructor(
-    private templater: Templater,
-    private output: Output,
-  ) {
+export class Parser {
+  parseAll(swaggers: Swagger[]): TypeObject[] {
+    return swaggers.reduce((acc, el) => acc.concat(this.parseOne(el)), []);
   }
 
-  public makeTypes(swaggerObjects: Swagger[], dir: string): number {
-    console.log('writing models in ', dir);
+  parseOne(swagger: Swagger): TypeObject[] {
+    const definitions = this.extractDefinitions(swagger);
 
-    return swaggerObjects.reduce((acc, el) => {
-      return acc + this.makeTypesForOneSwagger(el, dir);
-    }, 0);
-  }
-
-  makeTypesForOneSwagger(swaggerObject: Swagger, dir: string): number {
-
-    const definitions: SwaggerDefinitions = swaggerObject.definitions // OpenAPI v2
-      || (swaggerObject as unknown as SwaggerV3Object).components.schemas; // OpenAPI v3
-
-    const typeNames: string[] = Object.keys(definitions);
-    const fileStrings: string[] = Object.entries(definitions)
+    return Object.entries(definitions)
       .map(([name, definition]) => {
         if (definition.enum) {
           return this.makeOneEnumFileString(name, definition);
@@ -53,32 +17,37 @@ export class InterfaceGenerator {
           return this.makeOneInterfaceFileString(name, definition);
         }
       });
-
-    fileStrings
-      .forEach((fileString: string, i: number) => this.output.saveInterfaceFile(dir, typeNames[i], fileString));
-
-    return fileStrings.length;
   }
 
-  private makeOneInterfaceFileString(name: string, definition: SwaggerDefinition): string {
+  extractDefinitions(swagger: Swagger): SwaggerDefinitions {
+    if (swagger?.definitions) {
+      return swagger.definitions;
+    }
+    if (isSwaggerV3(swagger)) {
+      return swagger.components.schemas;
+    }
+    throw new Error('Unknown swagger');
+  }
 
-    return this.templater.renderInterface({
+  private makeOneInterfaceFileString(name: string, definition: SwaggerDefinition): TypeObject {
+
+    return {
       description: definition.description,
       name,
       properties: this.makeProperties(definition),
       imports: this.makeImports(name, definition),
-    });
+    };
   }
 
-  private makeOneEnumFileString(name: string, definition: SwaggerDefinition): string {
-    return this.templater.renderEnum({
+  private makeOneEnumFileString(name: string, definition: SwaggerDefinition): TypeObject {
+    return {
       description: definition.description,
       name,
       properties: definition.enum.map(x => ({
         name: x.toUpperCase(),
         value: x
       }))
-    });
+    };
   }
 
   private makeProperties(definition: SwaggerDefinition): InterfaceProperty[] {
