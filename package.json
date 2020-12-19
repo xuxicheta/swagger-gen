@@ -7,7 +7,7 @@
     "start:url": "tsc && node dist/swagger-gen/index.js --url=https://localhost:5001/swagger/v1/swagger.json",
     "start:file": "tsc && node dist/swagger-gen/index.js --file=swagger.json",
     "build": "tsc",
-    "test": "jest"
+    "test": "npx jest"
   },
   "author": "Anton Shvets",
   "bin": {
