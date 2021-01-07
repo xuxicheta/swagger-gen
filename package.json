@@ -7,7 +7,7 @@
     "start:url": "tsc && node dist/swagger-gen/index.js --url=https://localhost:5001/swagger/v1/swagger.json",
     "start:file": "tsc && node dist/swagger-gen/index.js --file=swagger.json",
     "build": "tsc",
-    "test": "npx jest"
+    "test": "jest"
   },
   "author": "Anton Shvets",
   "bin": {
@@ -15,8 +15,8 @@
   },
   "license": "ISC",
   "dependencies": {
-    "mustache": "^3.1.0",
-    "yargs": "^14.0.0"
+    "mustache": "^3.2.1",
+    "yargs": "^14.2.3"
   },
   "repository": {
     "type": "git",
@@ -29,15 +29,14 @@
     "typescript"
   ],
   "devDependencies": {
-    "@types/jest": "^24.0.18",
+    "@types/jest": "^24.9.1",
     "@types/mustache": "^0.8.32",
-    "@types/node": "^12.7.11",
-    "@types/request": "^2.48.3",
-    "@types/yargs": "^13.0.3",
+    "@types/node": "^12.19.12",
+    "@types/yargs": "^13.0.11",
     "jest": "^24.9.0",
-    "ts-jest": "^24.1.0",
-    "ts-node": "^8.4.1",
-    "tslint": "^5.20.0",
+    "ts-jest": "^24.3.0",
+    "ts-node": "^8.10.2",
+    "tslint": "^5.20.1",
     "typescript": "^3.9.7"
   }
 }
