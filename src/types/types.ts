@@ -31,7 +31,7 @@ export interface TypeObject {
 }
 
 export function isInterfaceProperty(property): property is InterfaceProperty {
-  return !!(property.name && property.description && property.type);
+  return !!(property.name && property.type);
 }
 
 export function isEnumProperty(property): property is EnumProperty {
