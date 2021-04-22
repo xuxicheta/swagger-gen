@@ -98,7 +98,7 @@ export class InterfaceGenerator {
   private makeImports(name: string, definition: SwaggerDefinition): InterfaceImport[] {
     return Array.from(new Set(Object.values(definition.properties)
       .map(property => this.extractImport(name, property))
-      .filter(importedName => importedName.importedName)))
+      .filter(importedName => importedName?.importedName)))
       .sort((a, b) => a.importedName.localeCompare(b.importedName));
   }
 
