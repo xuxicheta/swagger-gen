@@ -33,18 +33,17 @@ const sampleSwagger3: Swagger = {
 } as any;
 
 describe('Parser', () => {
-  it('should be created', () => {
-    const parser = new Parser();
-    expect(parser).toBeDefined();
+  let parser: Parser;
+
+  beforeEach(() => {
+    parser = new Parser();
   });
 
   it('should be created', () => {
-    const parser = new Parser();
     expect(parser).toBeDefined();
   });
 
   it('should parseAll', () => {
-    const parser = new Parser();
     jest.spyOn(parser, 'parseOne').mockReturnValue([typeSampleA, typeSampleB]);
     const swaggers = [1, 3] as unknown as Swagger[];
     const result = parser.parseAll(swaggers);
@@ -52,7 +51,6 @@ describe('Parser', () => {
   });
 
   it('should parseOne', () => {
-    const parser = new Parser();
     const extractDefinitions = jest.spyOn(parser, 'extractDefinitions').mockReturnValue({
       a: 'aa',
       b: 'bb'
@@ -69,7 +67,6 @@ describe('Parser', () => {
 
   it('should makeTypeObject with interface definition', () => {
     const definition = { a: 1 } as any;
-    const parser = new Parser();
     const makeTypeObject = jest.spyOn(parser.parserInterface, 'makeTypeObject').mockReturnValue('x' as any);
     const makeTypeObject2 = jest.spyOn(parser.parserEnum, 'makeTypeObject').mockReturnValue('xx' as any);
     const result = parser.makeTypeObject('oo', definition);
@@ -80,7 +77,6 @@ describe('Parser', () => {
 
   it('should makeTypeObject with enum definition', () => {
     const definition = { a: 1, enum: true } as any;
-    const parser = new Parser();
     const makeTypeObject = jest.spyOn(parser.parserInterface, 'makeTypeObject').mockReturnValue('x' as any);
     const makeTypeObject2 = jest.spyOn(parser.parserEnum, 'makeTypeObject').mockReturnValue('xx' as any);
     const result = parser.makeTypeObject('ooo', definition);
@@ -90,13 +86,11 @@ describe('Parser', () => {
   });
 
   it('should extract definition with version 2', () => {
-    const parser = new Parser();
     const result = parser.extractDefinitions(sampleSwagger2);
     expect(result).toBe(2);
   });
 
   it('should extract definition with version 3', () => {
-    const parser = new Parser();
     const result = parser.extractDefinitions(sampleSwagger3);
     expect(result).toBe(3);
   });
