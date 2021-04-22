@@ -82,20 +82,25 @@ export class InterfaceGenerator {
   }
 
   private makeProperties(definition: SwaggerDefinition): InterfaceProperty[] {
-    return Object.entries(definition.properties).map(([name, property]) => {
-      return {
-        name,
-        description: property.description,
-        type: this.extractPropertyType(property),
-        nullable: property.nullable || false,
-      };
-    });
+    return Object.entries(definition.properties)
+        .sort((a, b) =>
+            a[0].localeCompare(b[0]))
+        .map(([name, property]) => {
+          return {
+            name,
+            description: property.description,
+            type: this.extractPropertyType(property),
+            nullable: property.nullable || false,
+          };
+        });
   }
 
   private makeImports(name: string, definition: SwaggerDefinition): InterfaceImport[] {
-    return Object.values(definition.properties)
+    return Array.from(new Set(Object.values(definition.properties)
       .map(property => this.extractImport(name, property))
-      .filter(imp => imp?.importedName);
+      .filter(importedName => importedName)))
+      .sort((a, b) => a.localeCompare(b))
+      .map(importedName => ({ importedName }));
   }
 
   private extractPropertyType(property: SwaggerPropertyDefinition): string {
@@ -139,7 +144,7 @@ export class InterfaceGenerator {
     }
   }
 
-  private extractImport(name: string, property: SwaggerPropertyDefinition): InterfaceImport {
+  private extractImport(name: string, property: SwaggerPropertyDefinition): string {
     if (['string', 'integer', 'number', 'boolean'].includes(property.type)) {
       return;
     }
