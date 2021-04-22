@@ -96,10 +96,18 @@ export class InterfaceGenerator {
   }
 
   private makeImports(name: string, definition: SwaggerDefinition): InterfaceImport[] {
-    return Array.from(new Set(Object.values(definition.properties)
+    const importsMap = Object.values(definition.properties)
       .map(property => this.extractImport(name, property))
-      .filter(importedName => importedName?.importedName)))
-      .sort((a, b) => a.importedName.localeCompare(b.importedName));
+      .filter(importedName => importedName?.importedName)
+      .sort((a, b) => a.importedName.localeCompare(b.importedName))
+      .reduce((acc, el) => {
+        return {
+          ...acc,
+          [el.importedName]: el,
+        };
+      }, {} as Record<string, InterfaceImport>);
+
+    return Object.values(importsMap);
   }
 
   private extractPropertyType(property: SwaggerPropertyDefinition): string {
