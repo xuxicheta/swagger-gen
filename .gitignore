@@ -2,5 +2,6 @@
 .idea
 models
 dist
+api
 node_modules
 /swagger.json
