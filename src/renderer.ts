@@ -1,49 +1,39 @@
-import { readFileSync } from 'fs';
-import * as mustache from 'mustache';
-import { resolve } from 'path';
 import { Config } from './config';
-import { isEnumProperty, isInterfaceProperty, TypeObject } from './types/types';
+import { isEnumProperty, isInterfaceProperty, Model } from './types/types';
+import { RenderInterface } from './render-interface';
+import { RenderEnum } from './render-enum';
 
 export class Renderer {
-  private interfaceTemplate: string;
-  private enumTemplate: string;
+  private renderInterface = new RenderInterface(this.config);
+  private renderEnum = new RenderEnum(this.config);
 
   constructor(
     private config: Config,
   ) {
-    this.parseTemplates(this.config.mustacheDir);
   }
 
-  renderAll(typeObjects: TypeObject[]): string[] {
+  renderModels(typeObjects: Model[]): string[] {
     return typeObjects.map(typeObject => this.renderTypeObject(typeObject));
   }
 
-  renderTypeObject(typeObject: TypeObject): string {
+  renderTypeObject(typeObject: Model): string {
+    typeObject = this.sortProperties(typeObject);
+
     if (isInterfaceProperty(typeObject.properties[0])) {
-      return this.renderInterface(typeObject);
+      return this.renderInterface.render(typeObject);
     }
     if (isEnumProperty(typeObject.properties[0])) {
-      return this.renderEnum(typeObject);
+      return this.renderEnum.render(typeObject);
     }
   }
 
-  renderInterface(typeObject: TypeObject): string {
-    return mustache.render(this.interfaceTemplate, typeObject);
-  }
-
-  renderEnum(typeObject: TypeObject): string {
-    return mustache.render(this.enumTemplate, typeObject);
-  }
-
-  private parseTemplates(mustacheDir: string): void {
-    this.interfaceTemplate = readFileSync(
-      resolve(mustacheDir, 'interface-model.mustache')
-    )
-      .toString();
-
-    this.enumTemplate = readFileSync(
-      resolve(mustacheDir, 'enum-model.mustache')
-    )
-      .toString();
+  private sortProperties(typeObject: Model): Model {
+    if (this.config.sortFields) {
+      typeObject = {
+        ...typeObject,
+        properties: [...typeObject.properties].sort((a, b) => a.name.localeCompare(b.name)),
+      };
+    }
+    return typeObject;
   }
 }

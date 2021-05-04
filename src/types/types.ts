@@ -23,10 +23,10 @@ export interface InterfaceImport {
   importedName: string;
 }
 
-export interface TypeObject {
+export interface Model {
   description?: string;
   name: string;
-  properties: InterfaceProperty[] | EnumProperty[];
+  properties: (InterfaceProperty | EnumProperty)[];
   imports?: InterfaceImport[];
 }
 

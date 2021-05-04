@@ -6,27 +6,34 @@ export class Config {
   files?: string[];
   modelsDir: string;
   mustacheDir: string;
+  apiDir: string;
   dryRun: boolean;
+  sortFields = false;
+  generateApi = false;
+  ignorePrefix = '';
   private readonly MODEL_DIR = 'models';
-  private readonly MUSTACHE_DIR = 'mustache';
+  private readonly TEMPLATES_DIR = 'templates';
+  private readonly API_DIR = 'api';
 
   constructor(rootDir: string) {
-    if (argv.help) {
-      this.consoleHelp();
-      process.exit();
-      return;
-    }
-
-    this.checkUrlAndFile(argv);
-
-    this.urls = [].concat(argv.url as string | string[]).filter(Boolean);
-    this.files = [].concat(argv.file as string | string[]).filter(Boolean);
-    this.mustacheDir = argv.mustacheDir as string || resolve(rootDir, this.MUSTACHE_DIR);
-    this.modelsDir = argv.modelsDir as string || resolve(process.cwd(), this.MODEL_DIR);
-    this.dryRun = argv.dryRun as boolean;
+    this.argumentsPipeline(rootDir);
   }
 
-  checkUrlAndFile(_argv: typeof argv): void {
+  argumentsPipeline(rootDir: string): void {
+    if (argv.help) {
+      return this.consoleHelp();
+    }
+
+    this.sortFields = !!argv.sort;
+    this.ignorePrefix = argv.ignorePrefix as string;
+    this.generateApi = !!argv.generateApi;
+    this.dryRun = !!argv.dryRun;
+
+    this.fillUrlAndFile(argv);
+    this.fillDirs(rootDir);
+  }
+
+  fillUrlAndFile(_argv: typeof argv): void {
     if (!(_argv.file || _argv.url)) {
       throw new Error('No file or url');
     }
@@ -34,10 +41,20 @@ export class Config {
     if (_argv.file && _argv.url) {
       throw new Error('Choose one, file or url');
     }
+
+    this.urls = [].concat(argv.url as string | string[]).filter(Boolean);
+    this.files = [].concat(argv.file as string | string[]).filter(Boolean);
+  }
+
+  fillDirs(rootDir: string): void {
+    this.mustacheDir = argv.templatesDir as string || resolve(rootDir, this.TEMPLATES_DIR);
+    this.modelsDir = argv.modelsDir as string || resolve(process.cwd(), this.MODEL_DIR);
+    this.apiDir = argv.apiDir as string || resolve(process.cwd(), this.API_DIR);
   }
 
   consoleHelp(): void {
-    const options = ['url', 'file', 'mustache-dir', 'models-dir', 'dry-run', 'help'];
+    const options = ['url', 'file', 'templates-dir', 'models-dir', 'dry-run', 'generate-api', 'ignore-prefix', 'help'];
     console.info(` available options: ${options.map(o => '--' + o).join('\n')}`);
+    process.exit();
   }
 }

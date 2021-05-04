@@ -1,5 +1,5 @@
 import { Swagger, SwaggerDefinition, SwaggerDefinitions } from './types/swagger';
-import { isSwaggerV3, TypeObject } from './types/types';
+import { isSwaggerV3, Model } from './types/types';
 import { ParserInterface } from './parser-interface';
 import { ParserEnum } from './parser-enum';
 
@@ -7,24 +7,27 @@ export class Parser {
   parserInterface = new ParserInterface();
   parserEnum = new ParserEnum();
 
-  parseAll(swaggers: Swagger[]): TypeObject[] {
+  parseModels(swaggers: Swagger[]): Model[] {
     return swaggers.reduce((acc, el) => acc.concat(this.parseOne(el)), []);
   }
 
-  parseOne(swagger: Swagger): TypeObject[] {
+  /** @internal */
+  parseOne(swagger: Swagger): Model[] {
     const definitions = this.extractDefinitions(swagger);
 
     return Object.entries(definitions)
       .map(([name, definition]) => this.makeTypeObject(name, definition));
   }
 
-  makeTypeObject(name: string, definition: SwaggerDefinition): TypeObject {
+  /** @internal */
+  makeTypeObject(name: string, definition: SwaggerDefinition): Model {
     if (definition.enum) {
       return this.parserEnum.makeTypeObject(name, definition);
     }
     return this.parserInterface.makeTypeObject(name, definition);
   }
 
+  /** @internal */
   extractDefinitions(swagger: Swagger): SwaggerDefinitions {
     if (swagger?.definitions) {
       return swagger.definitions;

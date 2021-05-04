@@ -51,7 +51,7 @@ export interface SwaggerHttpEndpoint {
     maxLength?: number;
     minLength?: number;
   }[];
-  respones: {
+  responses: {
     [httpStatusCode: string]: {
       description: string;
       schema: Schema;

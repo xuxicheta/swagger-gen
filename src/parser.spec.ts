@@ -1,15 +1,15 @@
 import { Parser } from './parser';
-import { TypeObject } from './types/types';
+import { Model } from './types/types';
 import { Swagger, SwaggerDefinitions } from './types/swagger';
 
-const typeSampleA: TypeObject = {
+const typeSampleA: Model = {
   properties: [],
   description: 'a',
   imports: [],
   name: 'a'
 };
 
-const typeSampleB: TypeObject = {
+const typeSampleB: Model = {
   properties: [],
   description: 'b',
   imports: [],
@@ -46,7 +46,7 @@ describe('Parser', () => {
   it('should parseAll', () => {
     jest.spyOn(parser, 'parseOne').mockReturnValue([typeSampleA, typeSampleB]);
     const swaggers = [1, 3] as unknown as Swagger[];
-    const result = parser.parseAll(swaggers);
+    const result = parser.parseModels(swaggers);
     expect(result).toEqual([typeSampleA, typeSampleB, typeSampleA, typeSampleB]);
   });
 

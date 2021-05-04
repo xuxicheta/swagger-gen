@@ -1,0 +1,31 @@
+import { httpParams } from 'ngx-https-params';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { {{dto}} } from '{{dtoDir}}';
+
+{{#get}}{{#query.0}}interface Get{{entityName}}QueryParams {
+
+  /** {{ description }} */
+  {{name}}{{#required}}?{{/required}}: {{type}};
+
+}
+{{/query.0}}{{/get}}
+{{#get}}{{#params}}interface Get{{entityName}}Params {
+
+/** {{ description }} */
+{{name}}{{#required}}?{{/required}}: {{type}};
+
+}
+{{/params}}{{/get}}
+
+@Injectable({ providedIn: 'root' })
+export class {{entityName}}ApiService {
+  private readonly url = '{{&apiUrl}}';
+  constructor(private http: HttpClient) {}
+
+{{#get}}
+  get({{#params}}params: Get{{entityName}}Params, {{/params}}{{#query}}queryParams: Get{{entityName}}QueryParams{{/query}}): Observable<{{response}}> {
+    return this.http.get(this.url, { params: httpParams(queryParams) });
+  }
+{{/get}}
+}
