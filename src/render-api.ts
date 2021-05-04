@@ -17,6 +17,7 @@ export class RenderApi {
   }
 
   render(api: ParsedApi): string {
+    console.log(JSON.stringify(api));
     return mustache.render(this.template, api);
   }
 

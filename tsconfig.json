@@ -12,6 +12,7 @@
   "exclude": [
     "models",
     "dist",
-    "test"
+    "test",
+    "api"
   ]
 }
