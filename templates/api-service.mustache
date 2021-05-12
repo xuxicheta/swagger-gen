@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 
 
 {{#get.query.length}}
-  interface Get{{entityName}}Params {
+  interface Get{{entityName}}QueryParams {
   {{#get.query}}{{#description}}  /** {{ description }} */
   {{/description}}  {{name}}{{#required}}?{{/required}}: {{type}};
   {{/get.query}}
@@ -20,14 +20,14 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class {{entityName}}ApiService {
-private readonly url = '{{&apiUrl}}';
-constructor(private http: HttpClient) {}
+  private readonly url = '{{&apiUrl}}';
+  constructor(private http: HttpClient) {}
 
 {{#get}}
   get({{#params.length}}params: Get{{entityName}}Params, {{/params.length}}{{#query.length}}queryParams: Get{{entityName}}QueryParams{{/query.length}}): Observable<{{response}}> {
-  {{#params.length}}    {{=<% %>=}}const url = this.url<%#params%>.replace('{<%name%>}', params.<%name%>)<%/params%>;<%={{ }}=%>
-  return this.http.get(url{{#query.length}}, { params: httpParams(queryParams) }{{/query.length}});
-  {{/params.length}}
+{{#params.length}}    {{=<% %>=}}const url = this.url<%#params%>.replace('{<%name%>}', params.<%name%>)<%/params%>;<%={{ }}=%>
+   return this.http.get(url{{#query.length}}, { params: httpParams(queryParams) }{{/query.length}});
+{{/params.length}}
   {{^params.length}}    return this.http.get(this.url{{#query.length}}, { params: httpParams(queryParams) }{{/query.length}});
   {{/params.length}}
   }

@@ -6,7 +6,8 @@
     "outDir": "dist/swagger-gen",
     "sourceMap": true,
     "declaration": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "experimentalDecorators": true
   },
 
   "exclude": [
