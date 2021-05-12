@@ -2,7 +2,7 @@ import { Swagger } from './types/swagger';
 import { readFile } from 'fs';
 import { get as getHttp } from 'http';
 import { get as getHttps } from 'https';
-import { Config } from './config';
+import { Config } from './config/config';
 
 export class Retriever {
 

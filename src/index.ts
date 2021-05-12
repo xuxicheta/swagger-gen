@@ -2,13 +2,13 @@
 
 import { join } from 'path';
 import { Retriever } from './retriever';
-import { Parser } from './parser';
-import { Renderer } from './renderer';
-import { Saver } from './saver';
+import { Parser } from './parse/parser';
+import { Renderer } from './render/renderer';
+import { Saver } from './save/saver';
 import { Pipe } from './pipe';
-import { Config } from './config';
-import { ParserApi } from './parser-api';
-import { RenderApi } from './render-api';
+import { Config } from './config/config';
+import { ParserApi } from './parse/parser-api';
+import { RenderApi } from './render/render-api';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 

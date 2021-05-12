@@ -1,5 +1,5 @@
-import { Config } from './config';
-import { ParsedApi } from './parser-api';
+import { Config } from '../config/config';
+import { ParsedApi } from '../parse/parser-api';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import * as mustache from 'mustache';

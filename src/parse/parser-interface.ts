@@ -1,5 +1,5 @@
-import { SwaggerDefinition, SwaggerFormat, SwaggerPropertyDefinition, SwaggerType } from './types/swagger';
-import { InterfaceImport, InterfaceProperty, Model } from './types/types';
+import { SwaggerDefinition, SwaggerFormat, SwaggerPropertyDefinition, SwaggerType } from '../types/swagger';
+import { InterfaceImport, InterfaceProperty, Model } from '../types/types';
 
 export class ParserInterface {
   makeTypeObject(name: string, definition: SwaggerDefinition): Model {

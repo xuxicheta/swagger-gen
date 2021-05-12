@@ -1,5 +1,5 @@
-import { Config } from './config';
-import { isEnumProperty, isInterfaceProperty, Model } from './types/types';
+import { Config } from '../config/config';
+import { isEnumProperty, isInterfaceProperty, Model } from '../types/types';
 import { RenderInterface } from './render-interface';
 import { RenderEnum } from './render-enum';
 

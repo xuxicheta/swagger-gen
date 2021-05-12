@@ -1,5 +1,5 @@
-import { Swagger, SwaggerDefinition, SwaggerDefinitions } from './types/swagger';
-import { isSwaggerV3, Model } from './types/types';
+import { Swagger, SwaggerDefinition, SwaggerDefinitions } from '../types/swagger';
+import { isSwaggerV3, Model } from '../types/types';
 import { ParserInterface } from './parser-interface';
 import { ParserEnum } from './parser-enum';
 

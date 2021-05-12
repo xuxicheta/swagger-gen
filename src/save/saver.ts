@@ -1,8 +1,8 @@
 import { join, resolve } from 'path';
 import { mkdirSync, readdirSync, unlinkSync, writeFileSync } from 'fs';
-import { Config } from './config';
-import { Model } from './types/types';
-import { ParsedApi } from './parser-api';
+import { Config } from '../config/config';
+import { Model } from '../types/types';
+import { ParsedApi } from '../parse/parser-api';
 
 export class Saver {
 

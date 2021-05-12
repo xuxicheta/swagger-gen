@@ -1,5 +1,5 @@
-import { Swagger, SwaggerFormat, SwaggerHttpEndpoint, SwaggerType } from './types/swagger';
-import { Config } from './config';
+import { Swagger, SwaggerFormat, SwaggerHttpEndpoint, SwaggerType } from '../types/swagger';
+import { Config } from '../config/config';
 
 function camelToDash(str: string): string {
   return str.replace(/([A-Z])/g, $1 => '-' + $1.toLowerCase());

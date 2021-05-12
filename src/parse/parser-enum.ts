@@ -1,5 +1,5 @@
-import { SwaggerDefinition } from './types/swagger';
-import { Model } from './types/types';
+import { SwaggerDefinition } from '../types/swagger';
+import { Model } from '../types/types';
 
 export class ParserEnum {
   makeTypeObject(name: string, definition: SwaggerDefinition): Model {

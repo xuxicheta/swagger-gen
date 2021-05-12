@@ -1,5 +1,5 @@
-import { Config } from './config';
-import { Model } from './types/types';
+import { Config } from '../config/config';
+import { Model } from '../types/types';
 import * as mustache from 'mustache';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';

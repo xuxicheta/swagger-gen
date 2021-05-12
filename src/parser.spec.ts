@@ -1,4 +1,4 @@
-import { Parser } from './parser';
+import { Parser } from './parse/parser';
 import { Model } from './types/types';
 import { Swagger, SwaggerDefinitions } from './types/swagger';
 
