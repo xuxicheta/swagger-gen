@@ -1,0 +1,9 @@
+{{#description}}
+  /** {{ description }} */
+{{/description}}
+export interface {{ name }} {
+{{#properties}}
+  /** {{ description }} */
+  {{name}}{{#nullable}}?{{/nullable}}: {{type}};
+{{/properties}}
+}

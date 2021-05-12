@@ -1,11 +1,12 @@
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
 import { Config } from '../config/config';
 import { Model } from '../types/types';
 import * as mustache from 'mustache';
+import { readTemplate } from './read-template';
 
 export class RenderInterface {
-  private template = this.parseTemplate(this.config.mustacheDir);
+  private readonly template = readTemplate(this.config, 'interface-model.mustache');
+  private readonly interfacePartial = readTemplate(this.config, 'interface-partial.mustache');
+  private readonly importsPartial = readTemplate(this.config, 'imports-partial.mustache');
 
   constructor(
     private config: Config,
@@ -13,13 +14,13 @@ export class RenderInterface {
   }
 
   render(typeObject: Model): string {
-    return mustache.render(this.template, typeObject);
-  }
-
-  private parseTemplate(mustacheDir: string): string {
-    return readFileSync(
-      resolve(mustacheDir, 'interface-model.mustache')
-    )
-      .toString();
+    return mustache.render(
+      this.template,
+      typeObject,
+      {
+        interface: this.interfacePartial,
+        imports: this.importsPartial,
+      }
+    );
   }
 }

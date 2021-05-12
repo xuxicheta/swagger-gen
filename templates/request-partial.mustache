@@ -1,0 +1,7 @@
+  {{method}}({{#params.length}}params: {{methodUpper}}{{entityName}}Params, {{/params.length}}{{#query.length}}queryParams: {{methodUpper}}{{entityName}}QueryParams{{/query.length}}): Observable<{{response}}> {
+  {{#params.length}}    {{=<% %>=}}const url = this.url<%#params%>.replace('{<%name%>}', params.<%name%>)<%/params%>;<%={{ }}=%>
+  return this.http.get(url{{#query.length}}, { params: httpParams(queryParams) }{{/query.length}});
+  {{/params.length}}
+  {{^params.length}}    return this.http.get(this.url{{#query.length}}, { params: httpParams(queryParams) }{{/query.length}});
+  {{/params.length}}
+  }
