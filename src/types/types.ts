@@ -31,13 +31,13 @@ export interface Model {
 }
 
 export function isInterfaceProperty(property): property is InterfaceProperty {
-  return !!(property.name && property.type);
+  return !!(property?.name && property?.type);
 }
 
 export function isEnumProperty(property): property is EnumProperty {
-  return !!(property.name && property.value);
+  return !!(property?.name && property?.value);
 }
 
 export function isSwaggerV3<T>(swagger): swagger is SwaggerV3Object {
-  return !!swagger.components.schemas;
+  return !!swagger?.components?.schemas;
 }

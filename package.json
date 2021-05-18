@@ -1,10 +1,10 @@
 {
   "name": "swagger-interfaces-generator",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "swagger interfaces generator",
   "main": "index.js",
   "scripts": {
-    "start:url": "tsc && node dist/swagger-gen/index.js --url=https://localhost:5001/swagger/v1/swagger.json",
+    "start:url": "tsc && node dist/swagger-gen/index.js --url=https://camunda.kube.satel.org/v2/api-docs",
     "start:file": "tsc && node dist/swagger-gen/index.js --file=swagger.json --generate-api",
     "build": "tsc",
     "test": "jest"

@@ -16,11 +16,12 @@ export class Parser {
     const definitions = this.extractDefinitions(swagger);
 
     return Object.entries(definitions)
-      .map(([name, definition]) => this.makeTypeObject(name, definition));
+      .map(([name, definition]) => this.makeTypeObject(name, definition))
+      .filter(Boolean);
   }
 
   /** @internal */
-  makeTypeObject(name: string, definition: SwaggerDefinition): Model {
+  makeTypeObject(name: string, definition: SwaggerDefinition): Model|null {
     if (definition.enum) {
       return this.parserEnum.makeTypeObject(name, definition);
     }

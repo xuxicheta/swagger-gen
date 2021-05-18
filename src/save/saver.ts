@@ -35,7 +35,10 @@ export class Saver {
     });
   }
 
-  saveOne(dir: string, name: string, fileString: string): void {
+  saveOne(dir: string, name: string, fileString: string|void): void {
+    if (!fileString) {
+      return;
+    }
     const fileName = resolve(dir, `${name}.ts`);
     writeFileSync(fileName, fileString);
   }

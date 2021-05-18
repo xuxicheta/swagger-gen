@@ -1,4 +1,4 @@
-import { SwaggerDefinition, SwaggerFormat, SwaggerPropertyDefinition, SwaggerType } from '../types/swagger';
+import { SwaggerDefinition, SwaggerDefinitionProperties, SwaggerFormat, SwaggerPropertyDefinition, SwaggerType } from '../types/swagger';
 import { InterfaceImport, InterfaceProperty, Model } from '../types/types';
 
 export class ParserInterface {
@@ -7,13 +7,13 @@ export class ParserInterface {
     return {
       description: definition.description,
       name,
-      properties: this.makeProperties(definition),
-      imports: this.makeImports(name, definition),
+      properties: this.makeProperties(definition?.properties ?? {}),
+      imports: this.makeImports(name, definition?.properties ?? {}),
     };
   }
 
-  makeProperties(definition: SwaggerDefinition): InterfaceProperty[] {
-    return Object.entries(definition.properties).map(([name, property]) => {
+  makeProperties(properties: SwaggerDefinitionProperties): InterfaceProperty[] {
+    return Object.entries(properties).map(([name, property]) => {
       return {
         name,
         description: property.description,
@@ -23,8 +23,8 @@ export class ParserInterface {
     });
   }
 
-  makeImports(name: string, definition: SwaggerDefinition): InterfaceImport[] {
-    return Array.from(Object.values(definition.properties)
+  makeImports(name: string, properties: SwaggerDefinitionProperties): InterfaceImport[] {
+    return Array.from(Object.values(properties)
       .map(property => this.extractImport(name, property))
       .filter(imp => imp?.importedName)
       .reduce((acc, el) => acc.set(el.importedName, el), new Map<string, InterfaceImport>())
