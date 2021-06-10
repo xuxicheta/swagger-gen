@@ -5,7 +5,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
 export class RenderEnum {
-  private template = this.parseTemplate(this.config.mustacheDir);
+  private template = this.parseTemplate(this.config.templatesDir);
 
   constructor(
     private config: Config,

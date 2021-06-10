@@ -2,9 +2,6 @@ import { Config } from './config';
 import yargs from 'yargs';
 import * as path from 'path';
 
-//
-// jest.mock('yargs');
-
 describe('Config', () => {
   const rootDir = process.cwd();
 
@@ -60,14 +57,38 @@ describe('Config', () => {
   });
 
   it('should set mustacheDir', () => {
-    yargs(['--mustache-dir=okom', '--url=x']);
+    yargs(['--templates-dir=okom', '--url=x']);
     const config = new Config('/');
-    expect(config.mustacheDir).toEqual('okom');
+    expect(config.templatesDir).toEqual('okom');
   });
 
   it('should set default mustacheDir', () => {
     yargs(['--url=x']);
     const config = new Config('/');
-    expect(config.mustacheDir).toEqual(path.resolve('/', 'mustache'));
+    expect(config.templatesDir).toEqual(path.resolve('/', 'templates'));
+  });
+
+  it('should set sort property', () => {
+    yargs(['--sort', '--url=x']);
+    const config = new Config('/');
+    expect(config.sortFields).toEqual(true);
+  });
+
+  it('should set ignorePrefix property', () => {
+    yargs(['--ignore-prefix', '--url=x']);
+    const config = new Config('/');
+    expect(config.ignorePrefix).toEqual(true);
+  });
+
+  it('should set generateApi property', () => {
+    yargs(['--generate-api', '--url=x']);
+    const config = new Config('/');
+    expect(config.generateApi).toEqual(true);
+  });
+
+  it('should set generateApi property', () => {
+    yargs(['--dryRun', '--url=x']);
+    const config = new Config('/');
+    expect(config.dryRun).toEqual(true);
   });
 });

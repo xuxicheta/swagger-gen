@@ -5,7 +5,7 @@ import { resolve } from 'path';
 import * as mustache from 'mustache';
 
 export class RenderApi {
-  private readonly template = this.parseTemplate(this.config.mustacheDir);
+  private readonly template = this.parseTemplate(this.config.templatesDir);
 
   constructor(
     private config: Config,

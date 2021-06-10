@@ -4,7 +4,7 @@ import { resolve } from 'path';
 
 export function readTemplate(config: Config, templateName: string): string {
   return readFileSync(
-    resolve(config.mustacheDir, templateName)
+    resolve(config.templatesDir, templateName)
   )
     .toString();
 }

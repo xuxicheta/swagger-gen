@@ -5,7 +5,7 @@ import { resolve } from 'path';
 import { InterfaceObject } from '../types/interface-object';
 
 export class RenderInterfacePartial {
-  private template = this.parseTemplate(this.config.mustacheDir);
+  private template = this.parseTemplate(this.config.templatesDir);
 
   constructor(
     private config: Config,
