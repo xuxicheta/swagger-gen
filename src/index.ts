@@ -18,7 +18,6 @@ const config = new Config(rootDir);
 
 const pipe = new Pipe(
   config,
-  new Retriever(config),
   new Parser(),
   new ParserApi(config),
   new Renderer(config),
