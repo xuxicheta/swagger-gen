@@ -68,7 +68,7 @@ describe('Parser', () => {
   it('should makeTypeObject with interface definition', () => {
     const definition = { a: 1 } as any;
     const makeTypeObject = jest.spyOn(parser.parserInterface, 'makeModel').mockReturnValue('x' as any);
-    const makeTypeObject2 = jest.spyOn(parser.parserEnum, 'makeTypeObject').mockReturnValue('xx' as any);
+    const makeTypeObject2 = jest.spyOn(parser.parserEnum, 'makeModel').mockReturnValue('xx' as any);
     const result = parser.makeModel(['oo', definition]);
     expect(makeTypeObject).toHaveBeenCalledWith('oo', definition);
     expect(makeTypeObject2).not.toHaveBeenCalled();
@@ -78,7 +78,7 @@ describe('Parser', () => {
   it('should makeTypeObject with enum definition', () => {
     const definition = { a: 1, enum: true } as any;
     const makeTypeObject = jest.spyOn(parser.parserInterface, 'makeModel').mockReturnValue('x' as any);
-    const makeTypeObject2 = jest.spyOn(parser.parserEnum, 'makeTypeObject').mockReturnValue('xx' as any);
+    const makeTypeObject2 = jest.spyOn(parser.parserEnum, 'makeModel').mockReturnValue('xx' as any);
     const result = parser.makeModel(['ooo', definition]);
     expect(makeTypeObject2).toHaveBeenCalledWith('ooo', definition);
     expect(makeTypeObject).not.toHaveBeenCalled();

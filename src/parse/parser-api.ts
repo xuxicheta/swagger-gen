@@ -40,7 +40,10 @@ export class ParserApi {
   }
 
   /** @internal */
-  parseOne(paths: Record<string, SwaggerPath>): ParsedApi[] {
+  parseOne(paths: Record<string, SwaggerPath>|undefined): ParsedApi[] {
+    if (!paths) {
+      return [];
+    }
     return Object.entries(paths).map(([pathName, api]) => {
       const apiUrl = pathName;
       const name = pathName.replace(this.config.ignorePrefix, '');

@@ -9,7 +9,7 @@ export interface SwaggerSchema {
   properties?: SwaggerDefinitionProperties;
 }
 
-export type SwaggerDefinitions  = Record<string, SwaggerDefinition>;
+export type SwaggerDefinitions = Record<string, SwaggerDefinition>;
 
 export interface SwaggerDefinitionProperties {
   [propertyName: string]: SwaggerPropertyDefinition;
@@ -33,21 +33,21 @@ export interface Swagger2 {
   basePath: string;
   schemes: string[];
   paths: Record<string, SwaggerPath>;
-  definitions: SwaggerDefinitions;
+  definitions?: SwaggerDefinitions;
 }
 
 export interface Swagger3 {
   openapi: string;
-  info: {
+  info?: {
     version: string;
     title: string;
     description: string;
   };
-  servers: {
+  servers?: {
     url: string;
     description: string;
   }[];
-  paths: {
+  paths?: {
     [endpointPath: string]: {
       get: SwaggerHttpEndpoint;
       post: SwaggerHttpEndpoint;
@@ -55,7 +55,7 @@ export interface Swagger3 {
       delete: SwaggerHttpEndpoint;
     }
   };
-  components: {
+  components?: {
     schemas?: SwaggerDefinitions;
     responses?: SwaggerDefinitions;
     parameters?: SwaggerDefinitions;
@@ -98,7 +98,7 @@ export interface SwaggerHttpEndpoint {
 }
 
 export interface SwaggerDefinition extends SwaggerSchema {
-  properties: SwaggerDefinitionProperties;
+  properties?: SwaggerDefinitionProperties;
   description?: string;
   required?: (keyof SwaggerDefinitionProperties)[];
   allOf?: SwaggerDefinition[];
@@ -120,5 +120,5 @@ export interface SwaggerPropertyDefinition extends SwaggerSchema {
   nullable?: boolean;
 }
 
-export type SwaggerType = 'integer' | 'number' | 'string' | 'boolean' | 'array';
+export type SwaggerType = 'integer' | 'number' | 'string' | 'boolean' | 'array' | 'object';
 export type SwaggerFormat = 'int32' | 'int64' | 'float' | 'double' | 'byte' | 'binary' | 'date' | 'date-time' | 'password';
