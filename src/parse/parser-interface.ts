@@ -2,8 +2,7 @@ import { SwaggerDefinition, SwaggerDefinitionProperties, SwaggerFormat, SwaggerP
 import { InterfaceImport, InterfaceProperty, Model } from '../types/types';
 
 export class ParserInterface {
-  makeTypeObject(name: string, definition: SwaggerDefinition): Model {
-
+  makeModel(name: string, definition: SwaggerDefinition): Model {
     return {
       description: definition.description,
       name,
@@ -12,8 +11,9 @@ export class ParserInterface {
     };
   }
 
+  /** @internal */
   makeProperties(properties: SwaggerDefinitionProperties): InterfaceProperty[] {
-    return Object.entries(properties).map(([name, property]) => {
+    return Object.entries(properties).map(([name, property]): InterfaceProperty => {
       return {
         name,
         description: property.description,
@@ -23,36 +23,37 @@ export class ParserInterface {
     });
   }
 
+  /** @internal */
   makeImports(name: string, properties: SwaggerDefinitionProperties): InterfaceImport[] {
     return Array.from(Object.values(properties)
       .map(property => this.extractImport(name, property))
-      .filter(imp => imp?.importedName)
+      .filter<InterfaceImport>((imp): imp is InterfaceImport => Boolean(imp?.importedName))
       .reduce((acc, el) => acc.set(el.importedName, el), new Map<string, InterfaceImport>())
       .values());
   }
 
-  extractImport(name: string, property: SwaggerPropertyDefinition): InterfaceImport {
+  extractImport(name: string, property: SwaggerPropertyDefinition): InterfaceImport | undefined {
     if (['string', 'integer', 'number', 'boolean'].includes(property.type)) {
       return;
     }
 
-    let importedName: string;
+    const importedName: string | undefined = (() => {
+      if (property.type === 'array' && property?.items?.$ref) {
+        return this.cleanRef(property.items.$ref);
+      }
 
-    if (property.type === 'array' && property.items.$ref) {
-      importedName = this.cleanRef(property.items.$ref);
-    }
+      if (property.$ref) {
+        return this.cleanRef(property.$ref);
+      }
+    })();
 
-    if (property.$ref) {
-      importedName = this.cleanRef(property.$ref);
-    }
-
-    if (name === importedName) {
+    if (name === importedName || importedName === undefined) {
       return;
+    } else {
+      return {
+        importedName,
+      };
     }
-
-    return {
-      importedName,
-    };
   }
 
   cleanRef($ref: string): string {
@@ -67,9 +68,9 @@ export class ParserInterface {
   extractPropertyType(property: SwaggerPropertyDefinition): string {
     switch (property.type) {
       case 'array':
-        return property.items.$ref
+        return property?.items?.$ref
           ? `${this.cleanRef(property.items.$ref)}[]`
-          : `${this.parseType(property.items.type as SwaggerType)}[]`;
+          : `${this.parseType(property.items?.type as SwaggerType)}[]`;
       case 'string':
       case 'integer':
       case 'number':

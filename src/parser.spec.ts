@@ -1,6 +1,6 @@
 import { Parser } from './parse/parser';
 import { Model } from './types/types';
-import { Swagger, SwaggerDefinitions } from './types/swagger';
+import { Swagger2, SwaggerDefinitions } from './types/swagger';
 
 const typeSampleA: Model = {
   properties: [],
@@ -16,7 +16,7 @@ const typeSampleB: Model = {
   name: 'b'
 };
 
-const sampleSwagger2: Swagger = {
+const sampleSwagger2: Swagger2 = {
   definitions: 2 as any,
   basePath: true as any,
   host: true as any,
@@ -26,7 +26,7 @@ const sampleSwagger2: Swagger = {
   swagger: true as any,
 };
 
-const sampleSwagger3: Swagger = {
+const sampleSwagger3: Swagger2 = {
   components: {
     schemas: 3 as any,
   },
@@ -45,7 +45,7 @@ describe('Parser', () => {
 
   it('should parseAll', () => {
     jest.spyOn(parser, 'parseOne').mockReturnValue([typeSampleA, typeSampleB]);
-    const swaggers = [1, 3] as unknown as Swagger[];
+    const swaggers = [1, 3] as unknown as Swagger2[];
     const result = parser.parseModels(swaggers);
     expect(result).toEqual([typeSampleA, typeSampleB, typeSampleA, typeSampleB]);
   });
@@ -55,8 +55,8 @@ describe('Parser', () => {
       a: 'aa',
       b: 'bb'
     } as unknown as SwaggerDefinitions);
-    const makeTypeObject = jest.spyOn(parser, 'makeTypeObject').mockReturnValue('makeTypeObject' as any);
-    const swagger = 1 as unknown as Swagger;
+    const makeTypeObject = jest.spyOn(parser, 'makeModel').mockReturnValue('makeTypeObject' as any);
+    const swagger = 1 as unknown as Swagger2;
     const result = parser.parseOne(swagger);
 
     expect(extractDefinitions).toHaveBeenCalledWith(swagger);
@@ -67,9 +67,9 @@ describe('Parser', () => {
 
   it('should makeTypeObject with interface definition', () => {
     const definition = { a: 1 } as any;
-    const makeTypeObject = jest.spyOn(parser.parserInterface, 'makeTypeObject').mockReturnValue('x' as any);
+    const makeTypeObject = jest.spyOn(parser.parserInterface, 'makeModel').mockReturnValue('x' as any);
     const makeTypeObject2 = jest.spyOn(parser.parserEnum, 'makeTypeObject').mockReturnValue('xx' as any);
-    const result = parser.makeTypeObject('oo', definition);
+    const result = parser.makeModel(['oo', definition]);
     expect(makeTypeObject).toHaveBeenCalledWith('oo', definition);
     expect(makeTypeObject2).not.toHaveBeenCalled();
     expect(result).toBe('x');
@@ -77,9 +77,9 @@ describe('Parser', () => {
 
   it('should makeTypeObject with enum definition', () => {
     const definition = { a: 1, enum: true } as any;
-    const makeTypeObject = jest.spyOn(parser.parserInterface, 'makeTypeObject').mockReturnValue('x' as any);
+    const makeTypeObject = jest.spyOn(parser.parserInterface, 'makeModel').mockReturnValue('x' as any);
     const makeTypeObject2 = jest.spyOn(parser.parserEnum, 'makeTypeObject').mockReturnValue('xx' as any);
-    const result = parser.makeTypeObject('ooo', definition);
+    const result = parser.makeModel(['ooo', definition]);
     expect(makeTypeObject2).toHaveBeenCalledWith('ooo', definition);
     expect(makeTypeObject).not.toHaveBeenCalled();
     expect(result).toBe('xx');

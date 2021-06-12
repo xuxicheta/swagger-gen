@@ -6,10 +6,10 @@ export class ParserEnum {
     return {
       description: definition.description,
       name,
-      properties: definition.enum.map(x => ({
+      properties: definition.enum?.map(x => ({
         name: x.toUpperCase(),
         value: x
-      }))
+      })) ?? [],
     };
   }
 }

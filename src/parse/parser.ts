@@ -1,42 +1,46 @@
-import { Swagger, SwaggerDefinition, SwaggerDefinitions } from '../types/swagger';
-import { isSwaggerV3, Model } from '../types/types';
+import { AnySwagger, SwaggerDefinition, SwaggerDefinitions } from '../types/swagger';
+import { Model } from '../types/types';
 import { ParserInterface } from './parser-interface';
 import { ParserEnum } from './parser-enum';
+import { isSwagger2, isSwagger3 } from './swagger-versions';
 
 export class Parser {
   parserInterface = new ParserInterface();
   parserEnum = new ParserEnum();
 
-  parseModels(swaggers: Swagger[]): Model[] {
-    return swaggers.reduce((acc, el) => acc.concat(this.parseOne(el)), []);
+  parseModels(swaggers: AnySwagger[] = []): Model[] {
+    return swaggers.reduce<Model[]>((acc, el) => acc.concat(this.parseOne(el)), []);
   }
 
   /** @internal */
-  parseOne(swagger: Swagger): Model[] {
+  parseOne(swagger: AnySwagger): Model[] {
     const definitions = this.extractDefinitions(swagger);
 
     return Object.entries(definitions)
-      .map(([name, definition]) => this.makeTypeObject(name, definition))
-      .filter(Boolean);
+      .map(this.makeModel, this)
+      .filter((model: Model | null): model is Model => Boolean(model));
   }
 
   /** @internal */
-  makeTypeObject(name: string, definition: SwaggerDefinition): Model|null {
+  makeModel([name, definition]: [string, SwaggerDefinition]): Model | null {
     if (definition.enum) {
       return this.parserEnum.makeTypeObject(name, definition);
     }
-    return this.parserInterface.makeTypeObject(name, definition);
+
+    if (definition.properties) {
+      return this.parserInterface.makeModel(name, definition);
+    }
+    return null;
   }
 
   /** @internal */
-  extractDefinitions(swagger: Swagger): SwaggerDefinitions {
-    if (swagger?.definitions) {
+  extractDefinitions(swagger: AnySwagger): SwaggerDefinitions {
+    if (isSwagger2(swagger) && swagger?.definitions) {
       return swagger.definitions;
     }
-    if (isSwaggerV3(swagger)) {
-      return swagger.components.schemas;
+    if (isSwagger3(swagger)) {
+      return swagger.components.schemas ?? {};
     }
-    throw new Error('Unknown swagger');
+    throw new Error('Unknown swagger version or incorrect object');
   }
-
 }

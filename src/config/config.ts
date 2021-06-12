@@ -2,20 +2,21 @@ import { resolve } from 'path';
 import { argv } from 'yargs';
 
 export class Config {
-  urls?: string[];
-  files?: string[];
-  modelsDir: string;
-  templatesDir: string;
-  apiDir: string;
-  dryRun: boolean;
+  urls: string[] = [];
+  files: string[] = [];
+  modelsDir = resolve(process.cwd(), 'models');
+  templatesDir = resolve(this.rootDir, 'templates');
+  apiDir = resolve(process.cwd(), 'api');
+  dryRun = false;
   sortFields = false;
   generateApi = false;
+  generateTypes = true;
   ignorePrefix = '';
 
   constructor(
     private rootDir: string
   ) {
-    this.argumentsPipeline(rootDir);
+    this.argumentsPipeline();
   }
 
   consoleHelp(): void {
@@ -24,40 +25,28 @@ export class Config {
     process.exit();
   }
 
-  private argumentsPipeline(rootDir: string): void {
-    const {
-      help,
-      ignorePrefix,
-      generateApi,
-      dryRun,
-      file,
-      url,
-      sort,
-      templatesDir,
-      modelsDir,
-      apiDir,
-    } = argv;
-
-    if (help) {
+  private argumentsPipeline(): void {
+    if (argv.help) {
       return this.consoleHelp();
     }
 
-    this.checkUrlAndFile(file, url);
+    this.checkUrlAndFileAvailability(argv.file, argv.url);
 
-    this.sortFields = Boolean(sort);
-    this.ignorePrefix = ignorePrefix as string;
-    this.generateApi = Boolean(generateApi);
-    this.dryRun = Boolean(dryRun);
+    this.sortFields = Boolean(argv.sort);
+    this.ignorePrefix = argv.ignorePrefix as string;
+    this.generateApi = Boolean(argv.generateApi);
+    this.generateTypes = Boolean(argv.generateTypes);
+    this.dryRun = Boolean(argv.dryRun);
 
-    this.urls = [].concat(url as string | string[]).filter(Boolean);
-    this.files = [].concat(file as string | string[]).filter(Boolean);
+    this.urls = this.urls.concat(argv.url as string | string[]).filter(Boolean);
+    this.files = this.files.concat(argv.file as string | string[]).filter(Boolean);
 
-    this.templatesDir = templatesDir as string || resolve(rootDir, 'templates');
-    this.modelsDir = modelsDir as string || resolve(process.cwd(), 'models');
-    this.apiDir = apiDir as string || resolve(process.cwd(), 'api');
+    this.templatesDir = argv.templatesDir ? argv.templatesDir as string : this.templatesDir;
+    this.modelsDir = argv.modelsDir ? argv.modelsDir as string : this.modelsDir;
+    this.apiDir = argv.apiDir ? argv.apiDir as string : this.apiDir;
   }
 
-  private checkUrlAndFile(file: unknown, url: unknown): void {
+  private checkUrlAndFileAvailability(file: unknown, url: unknown): void {
     if (!file && !url) {
       throw new Error('No file or url');
     }

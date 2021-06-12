@@ -1,8 +1,8 @@
 import { Config } from '../config/config';
-import { isEnumProperty, isInterfaceProperty, Model } from '../types/types';
+import { Model } from '../types/types';
 import { RenderInterface } from './render-interface';
 import { RenderEnum } from './render-enum';
-import { RenderInterfacePartial } from './render-interface-partial';
+import { isEnumProperty, isInterfaceProperty } from './propery-type';
 
 export class Renderer {
   private renderInterface = new RenderInterface(this.config);
@@ -26,6 +26,8 @@ export class Renderer {
     if (isEnumProperty(model.properties[0])) {
       return this.renderEnum.render(model);
     }
+
+    throw new Error('unknown property ' + model.name);
   }
 
   private sortProperties(typeObject: Model): Model {

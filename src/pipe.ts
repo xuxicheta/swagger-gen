@@ -2,7 +2,7 @@ import { Retriever } from './retriever';
 import { Parser } from './parse/parser';
 import { Renderer } from './render/renderer';
 import { Saver } from './save/saver';
-import { Swagger } from './types/swagger';
+import { AnySwagger } from './types/swagger';
 import { Model } from './types/types';
 import { ParserApi } from './parse/parser-api';
 import { RenderApi } from './render/render-api';
@@ -11,7 +11,6 @@ import { Config } from './config/config';
 export class Pipe {
   constructor(
     private config: Config,
-    private retriever: Retriever,
     private parser: Parser,
     private parserApi: ParserApi,
     private renderer: Renderer,
@@ -22,7 +21,8 @@ export class Pipe {
 
   public async run(): Promise<void> {
     try {
-      const swaggers: Swagger[] = await this.retriever.getSwaggers();
+      const retriever = new Retriever(this.config);
+      const swaggers: AnySwagger[] = await retriever.getSwaggers();
 
       this.runTypes(swaggers);
       this.runApis(swaggers, this.config.generateApi);
@@ -31,13 +31,13 @@ export class Pipe {
     }
   }
 
-  runTypes(swaggers: Swagger[]): void {
+  runTypes(swaggers: AnySwagger[]): void {
     const models: Model[] = this.parser.parseModels(swaggers);
     const modelStrings: string[] = this.renderer.renderModels(models);
     this.saver.saveModels(models, modelStrings);
   }
 
-  runApis(swaggers: Swagger[], generateApi: boolean): void {
+  runApis(swaggers: AnySwagger[], generateApi: boolean): void {
     if (!generateApi) {
       return;
     }

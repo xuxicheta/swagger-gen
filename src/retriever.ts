@@ -1,4 +1,4 @@
-import { Swagger } from './types/swagger';
+import { Swagger2 } from './types/swagger';
 import { readFile } from 'fs';
 import { get as getHttp } from 'http';
 import { get as getHttps } from 'https';
@@ -11,22 +11,22 @@ export class Retriever {
   ) {
   }
 
-  async getSwaggers(): Promise<Swagger[]> {
+  async getSwaggers(): Promise<Swagger2[]> {
     const fromFiles = this.allFromFiles(this.config.files);
     const fromUrls = this.allFromUrls(this.config.urls);
 
     return [...await fromFiles, ...await fromUrls];
   }
 
-  allFromFiles(files: string[]): Promise<Swagger[]> {
+  allFromFiles(files: string[]): Promise<Swagger2[]> {
     return Promise.all(files.map(file => this.fromFile(file)));
   }
 
-  allFromUrls(urls: string[]): Promise<Swagger[]> {
+  allFromUrls(urls: string[]): Promise<Swagger2[]> {
     return Promise.all(urls.map(url => this.fromUrl(url)));
   }
 
-  fromFile(filePath: string): Promise<Swagger> {
+  fromFile(filePath: string): Promise<Swagger2> {
     console.log(`getting json from ${filePath} ...`);
     return new Promise<string>((resolve, reject) => {
       readFile(filePath, (err, result) => {
@@ -40,7 +40,7 @@ export class Retriever {
       .catch(() => console.warn('Error when retrieving file from ', filePath));
   }
 
-  fromUrl(urlString: string): Promise<Swagger> {
+  fromUrl(urlString: string): Promise<Swagger2> {
     const url = new URL(urlString);
     const get = url.protocol === 'https:' ? getHttps : getHttp;
 
@@ -49,6 +49,10 @@ export class Retriever {
       get(url, (res) => {
         const { statusCode } = res;
         const contentType = res.headers['content-type'];
+
+        if (!contentType) {
+          throw new Error('Not defined content-type');
+        }
 
         const error = (() => {
           if (statusCode !== 200) {

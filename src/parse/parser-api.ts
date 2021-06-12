@@ -1,38 +1,10 @@
-import { Swagger, SwaggerFormat, SwaggerHttpEndpoint, SwaggerType } from '../types/swagger';
+import { AnySwagger, SwaggerFormat, SwaggerHttpEndpoint, SwaggerHttpEndpointParameter, SwaggerPath, SwaggerSchema, SwaggerType } from '../types/swagger';
 import { Config } from '../config/config';
-
-function camelToDash(str: string): string {
-  return str.replace(/([A-Z])/g, $1 => '-' + $1.toLowerCase());
-}
-
-function dashToCamel(str: string): string {
-  return str
-    .replace(/(\-[a-z])/g, $1 => $1.toUpperCase().replace('-', ''))
-    .replace(/^[a-z]/, s => s.toUpperCase());
-}
-
-interface Schema {
-  $ref?: string;
-  type?: SwaggerType;
-  format?: SwaggerFormat;
-  items?: Schema;
-}
-
-export interface Parameter {
-
-  name: string;
-  in: 'path' | 'query' | 'body';
-  required: boolean;
-  description?: string;
-  type?: string;
-  schema?: Schema;
-  maxLength?: number;
-  minLength?: number;
-}
+import { dashToCamel } from '../tools/dash-to-camel';
 
 export interface ParsedParameter {
   name: string;
-  description: string;
+  description: string | undefined;
   required: boolean;
   type: string;
 }
@@ -60,15 +32,18 @@ export class ParserApi {
   ) {
   }
 
-  parse(swaggers: Swagger[]): ParsedApi[] {
-    return swaggers.reduce((acc, el) => acc.concat(this.parseOne(el)), []);
+  parse(swaggers: AnySwagger[]): ParsedApi[] {
+    return swaggers.reduce<ParsedApi[]>(
+      (acc, el) => acc.concat(this.parseOne(el.paths)),
+      [],
+    );
   }
 
   /** @internal */
-  parseOne(swagger: Swagger): ParsedApi[] {
-    return Object.entries(swagger.paths).map(([path, api]) => {
-      const apiUrl = path;
-      const name = path.replace(this.config.ignorePrefix, '');
+  parseOne(paths: Record<string, SwaggerPath>): ParsedApi[] {
+    return Object.entries(paths).map(([pathName, api]) => {
+      const apiUrl = pathName;
+      const name = pathName.replace(this.config.ignorePrefix, '');
       const entityName = dashToCamel(name.split('/').pop());
       return {
         apiUrl,
@@ -78,11 +53,11 @@ export class ParserApi {
         post: this.parseEndpoint(api.post),
         put: this.parseEndpoint(api.put),
         delete: this.parseEndpoint(api.delete),
-      };
+      } as ParsedApi;
     });
   }
 
-  parseEndpoint(endpoint: SwaggerHttpEndpoint): ParsedEndpoint | undefined {
+  parseEndpoint(endpoint: SwaggerHttpEndpoint | undefined): ParsedEndpoint | undefined {
     if (!endpoint) {
       return undefined;
     }
@@ -92,8 +67,9 @@ export class ParserApi {
       const body = endpoint.parameters?.filter(p => p.in === 'body').map(this.parseParameter, this);
       const params = endpoint.parameters?.filter(p => p.in === 'path').map(this.parseParameter, this);
       const result = endpoint.responses['200'];
-      const response = result['content']
-        ? this.extractPropertySchema(result['content']['text/json'].schema)
+
+      const response = result.content
+        ? this.extractPropertySchema(result.content['text/json'].schema)
         : 'void';
 
       return { query, body, response, params };
@@ -102,7 +78,7 @@ export class ParserApi {
     }
   }
 
-  parseParameter(parameter: Parameter): ParsedParameter {
+  parseParameter(parameter: SwaggerHttpEndpointParameter): ParsedParameter {
     try {
       return {
         name: parameter.name,
@@ -116,47 +92,51 @@ export class ParserApi {
     }
   }
 
-  parseType(type: SwaggerType, format: SwaggerFormat, $ref: string): string {
+  parseType(
+    type: SwaggerType | undefined,
+    format: SwaggerFormat | undefined,
+    $ref: string | undefined,
+  ): string {
     switch (type) {
       case 'integer':
         return 'number';
       case 'boolean':
         return 'boolean';
-
       case 'string':
-        if (format === 'date-time') {
-          return 'Date';
-        }
-        return 'string';
+        return (() => {
+          if (format === 'date-time') {
+            return 'Date';
+          }
+          return 'string';
+        })();
 
       default:
-        return this.cleanRef($ref) || type;
+        return this.cleanRef($ref) || type || '';
     }
   }
 
-  extractPropertySchema(schema: Schema): string {
+  extractPropertySchema(schema?: SwaggerSchema): string {
     try {
-      switch (schema.type) {
+      switch (schema?.type) {
         case 'array':
           return schema.items?.$ref
             ? `${this.cleanRef(schema.items?.$ref)}[]`
-            : `${this.parseType(schema.items.type, schema.items.format, schema.items.$ref)}[]`;
+            : `${this.parseType(schema.items?.type, schema.items?.format, schema.items?.$ref)}[]`;
         case 'string':
         case 'integer':
         case 'number':
         case 'boolean':
           return this.parseType(schema.type, schema.format, schema.$ref);
         default:
-          return schema.$ref ? this.cleanRef(schema.$ref) : 'any';
+          return schema?.$ref ? this.cleanRef(schema.$ref) : 'any';
       }
     } catch (e) {
       console.error('Error while extractPropertyType schema ', schema);
       throw e;
     }
-
   }
 
-  cleanRef($ref: string): string {
+  cleanRef($ref: string | undefined): string {
     if (!$ref) {
       throw new Error('No ref$ to clean');
     }
